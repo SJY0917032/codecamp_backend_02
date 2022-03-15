@@ -9,7 +9,7 @@
 // createDate(2020, 12, 2, 11, 30, 29);
 
 const createDate = () => {
-  day = new Date();
+  let day = new Date();
   console.log(`오늘은 ${day.getFullYear()}년 ${day.getMonth() + 1}월 ${day.getDate()}일 ${day.getHours()}:${day.getMinutes()}:${day.getSeconds()} 입니다.`);
 };
 
