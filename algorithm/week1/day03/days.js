@@ -8,6 +8,16 @@ function days(month) {
   } else {
     console.log("30");
   }
+  /*
+  Object를 활용한다면
+  Object[key] 를 활용해서 if문 없이도 추출이 가능하다.
+    const obj = {
+      1:  31,
+      2: 28,
+      ...
+    }
+    console.log(obj[month])
+  */
 }
 days(1); // 31
 days(2); // 28
