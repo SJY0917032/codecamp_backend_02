@@ -1,9 +1,5 @@
 /**
  * 회원 목록을 조회하는 API
- *
- *
- *
- *
  */
 
 import express from "express";
