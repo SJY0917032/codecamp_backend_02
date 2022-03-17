@@ -1,9 +1,8 @@
 import express from "express";
 import swaggerUi from "swagger-ui-express";
-// import swaggerDocument from "./swagger.json";
 import swaggerJsdoc from "swagger-jsdoc";
-import { checkValidationPhone, createToken, sendTokenToPhone } from "./phone.js";
 import { options } from "./swagger/config.js";
+import { checkValidationPhone, createToken, sendTokenToPhone } from "./phone.js";
 
 const app = express();
 const openapiSpecification = swaggerJsdoc(options);
