@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <title>회원가입</title>
+  </head>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const zzz = () => {
+      // 1. get a phoneNumber
+      const myPhoneNumber = document.getElementById("phoneNumber").value;
+      console.log(phoneNumber);
+      // 2. send Token To Phone
+      axios
+        .post("http://127.0.0.1:3000/tokens/phone", {
+          phoneNumber: myPhoneNumber,
+        })
+        .then((res) => {
+          const DATA = res.data;
+          document.getElementById("token").innerText = `인증번호 : ${DATA}`;
+        });
+    };
+  </script>
+  <body>
+    휴대폰번호 : <input type="text" id="phoneNumber" />
+    <button onclick="zzz()">인증하기</button>
+    <div id="token">인증상태</div>
+    <button>가입하기</button>
+  </body>
+</html>
