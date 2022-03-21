@@ -11,15 +11,6 @@ const port = 3000;
 app.use(express.json());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 
-/**
- * @openapi
- * /:
- *   get:
- *     description: Welcome to localhost
- *     responses:
- *       200:
- *         description: Return Hello world word..
- */
 app.get("/", (req, res) => {
   console.log(req);
   res.send("Hello World!");
