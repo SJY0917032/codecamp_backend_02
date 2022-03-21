@@ -16,7 +16,7 @@ arr	              answer
 function solution(arr) {
   let answer = [];
   // out of index를 막기위해 마지막길이보다 짧게 순회한다.
-  for (i = 0; i <= arr.length - 1; i++) {
+  for (i = 0; i < arr.length ; i++) {
     // 현재인덱스와 다음인덱스를 비교해 같지 않다면 정답배열에 값을 추가해준다.
     if (arr[i] !== arr[i + 1]) {
       answer.push(arr[i]);
