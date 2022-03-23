@@ -1,0 +1,18 @@
+version: "3.7"
+
+services:
+    # 서비스명
+    my-backend:
+        # Dockerfile
+        build:
+            # 위치
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - 3001:3001
+        volumes:
+        #  도커 밖(원본) : 도커 안(도커내부)
+            - ./index.js:/myfolder/index.js
+
+    my-database:
+        image: mongo:latest
