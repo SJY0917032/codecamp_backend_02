@@ -5,26 +5,39 @@
 예를 들어 s가 "pPoooyY"면 true를 return하고 "Pyy"라면 false를 return합니다.
 */
 function solution(s) {
-  var answer = true;
-  let p = 0;
-  let y = 0;
+  // var answer = true;
+  // let p = 0;
+  // let y = 0;
 
-  // 일단 s를 모두 대문자로 바꾼다
-  s = s.toUpperCase();
+  // // 일단 s를 모두 대문자로 바꾼다
+  // s = s.toUpperCase();
 
-  // 문자열 s를 순회하면서 p면 p++ y면 y++
-  for (i = 0; i < s.length; i++) {
-    if (s[i] === "P") {
-      p++;
-    } else if (s[i] === "Y") {
-      y++;
-    }
-  }
+  // // 문자열 s를 순회하면서 p면 p++ y면 y++
+  // for (i = 0; i < s.length; i++) {
+  //   if (s[i] === "P") {
+  //     p++;
+  //   } else if (s[i] === "Y") {
+  //     y++;
+  //   }
+  // }
 
-  // 개수가 다르면 false 반환
-  if (p !== y) {
-    answer = false;
-  }
+  // // 개수가 다르면 false 반환
+  // if (p !== y) {
+  //   answer = false;
+  // }
 
-  return answer;
+  // return answer;
+  // 리팩터링
+  const check = {};
+
+  s.toLowerCase()
+    .split("")
+    .forEach((str) => {
+      check[str] === undefined
+        ? // 객체에 할당된 키 데이터가 없다면
+          (check[str] = 1)
+        : // 객체에 할당된 키 데이터가 있다면 ++
+          check[str]++;
+    });
+  return check.p === check.y;
 }
