@@ -1,6 +1,6 @@
 import puppeteer from "puppeteer";
 // import mongoose from "mongoose"; TODO : 디비연결 및 저장
-// import { Coffee } from "./models/coffee.model.js"
+// import { StarBucks } from "./models/coffee.model.js"
 
 async function starbucksCrawling() {
   const browser = await puppeteer.launch({ headless: false });
