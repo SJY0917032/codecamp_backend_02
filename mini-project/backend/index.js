@@ -43,7 +43,6 @@ app.post("/user", async (req, res) => {
     if (checkPhoneAndToken) {
       // 회원가입시키기
       const result = await createUser(user);
-      console.log(result);
       // 프론트에 데이터넘기기
       res.send(result);
     } else {

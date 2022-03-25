@@ -67,7 +67,6 @@ export const getWelcomeTemplate = ( name, phone, prefer ) => {
   createdAt = `${createdAt.getFullYear()}-${
     createdAt.getMonth() + 1
   }-${createdAt.getDate()}`;
-
   return `
             <html>
                 <body>
@@ -89,7 +88,6 @@ export async function sendToWelcomeEmail(email, template) {
   const X_SECRET_KEY = process.env.EMAIL_X_SECRET_KEY;
   const APP_KEY = process.env.EMAIL_APP_KEY;
   const SENDER = process.env.EMAIL_SENDER;
-
   const RESULT_DATA = await axios.post(
     // This Endpoint
     `https://api-mail.cloud.toast.com/email/v2.0/appKeys/${APP_KEY}/sender/mail`,

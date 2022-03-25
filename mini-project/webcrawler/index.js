@@ -1,6 +1,7 @@
 import puppeteer from "puppeteer";
-// import mongoose from "mongoose"; TODO : 디비연결 및 저장
-// import { StarBucks } from "./models/coffee.model.js"
+import mongoose from "mongoose"; 
+mongoose.connect("mongodb://localhost:27017/camp");
+import { StarBucks } from "./models/coffee.model.js"
 
 async function starbucksCrawling() {
   const browser = await puppeteer.launch({ headless: false });
@@ -20,11 +21,16 @@ async function starbucksCrawling() {
       `#container > div.content > div.product_result_wrap.product_result_wrap01 > div > dl > dd:nth-child(2) > div.product_list > dl > dd:nth-child(8) > ul > li:nth-child(${i}) > dl > dt > a > img`,
       (el) => el.getAttribute("src")
     );
-        //  TODO: 디비에저장
-    console.log(`제품명 : ${name}
-                 사진링크 : ${img}`)
+    
+    const coffee = await new StarBucks({
+      name : name,
+      img : img,
+    })
+    await coffee.save()
+    console.log(`커피 : ${name}를 긁어와 저장했읍니다..`);
   }
 
+  
   await browser.close()
 }
 
