@@ -16,6 +16,8 @@ services:
             - ./phone.js:/myfolder/phone.js
             - ./signup.js:/myfolder/signup.js
             - ./utils.js:/myfolder/utils.js
+            - ./users.js:/myfolder/users.js
+            - ./coffee.js:/myfolder/coffee.js
 
     my-database:
         image: mongo:latest

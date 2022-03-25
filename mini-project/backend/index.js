@@ -13,13 +13,17 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 
-// custom
+// 커스텀 라이브러리
+// 회원가입 관련
 import { createUser, validationUserData, checkTokenIsTrue } from "./signup.js";
 // 핸드폰 인증관련
 import { checkPhone, createToken, checkToken,sendTokenToPhone } from "./phone.js";
-
 // 유틸 
 import { validationPhone } from "./utils.js"
+// 회원
+import { getUsers} from "./users.js"
+// 커피
+import { getCoffee} from "./coffee.js"
 
 // 환경변수
 dotenv.config();
@@ -86,6 +90,18 @@ app.patch("/tokens/phone", (req, res) => {
       res.send(data);
     });
 });
+
+// 회원 가져옴
+app.get("/users", async (req, res) => {
+  const Users = await getUsers();
+  res.send([...Users])
+})
+
+// 커피들 가져옴
+app.get("/starbucks", async(req,res) => {
+  const Coffee = await getCoffee()
+  res.send([...Coffee])
+})
 
 mongoose.connect("mongodb://my-database:27017/camp");
 
