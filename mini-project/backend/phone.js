@@ -1,5 +1,5 @@
 import axios from "axios";
-// import { Token } from "./models/token.model.js"
+import { Token } from "./models/token.model.js"
 
 // 토큰 생성
 export function createToken() {
@@ -17,20 +17,20 @@ export async function sendTokenToPhone(phone, token) {
   const SENDER = process.env.SMS_SENDER;
 
   // 토큰이 존재하는지 체크.
-  // const validationToken = await token.exists({phone:phone})
+  const validationToken = await Token.exists({phone:phone})
 
   // 토큰이 존재하지 않으면 디비에 저장한다.
   if (!validationToken) {
-    const craetedToken = await new Token({
+    const createdToken = await new Token({
       token: String(token),
       phone: String(phone),
       isAuth: false,
     });
-    await createToken.save();
+    await createdToken.save();
     console.log(`새로운 핸드폰 ${phone} 이 저장됐습니다.`);
   } else {
     // 존재하면 토큰정보를 갱신시켜준다
-    await Token.update(
+    await Token.updateOne(
       { phone: phone },
       {
         $set: {
@@ -85,7 +85,7 @@ export async function checkPhone(phone) {
         reject(false);
       });
     } else {
-      await Auth.update(
+      await Token.update(
         { phone: phone },
         {
           $set: {
@@ -99,3 +99,4 @@ export async function checkPhone(phone) {
       });
     }
   }
+

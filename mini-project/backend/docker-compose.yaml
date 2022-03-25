@@ -13,7 +13,9 @@ services:
         volumes:
         #  도커 밖(원본) : 도커 안(도커내부)
             - ./index.js:/myfolder/index.js
-            # - ./phone.js:/myfolder/phone.js
+            - ./phone.js:/myfolder/phone.js
+            - ./signup.js:/myfolder/signup.js
+            - ./utils.js:/myfolder/utils.js
 
     my-database:
         image: mongo:latest
