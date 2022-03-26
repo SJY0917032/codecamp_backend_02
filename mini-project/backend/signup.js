@@ -2,11 +2,7 @@ import cheerio from "cheerio";
 import axios from "axios";
 
 // 각종 유틸 (유효성검증등등..)
-import {
-  validationPersonal,
-  validationPhone,
-  validationEmail,
-} from "./utils.js";
+import { validationPersonal, validationPhone, validationEmail } from "./utils.js";
 // 토큰 모델 임포트
 import { Token } from "./models/token.model.js";
 // 유저 모델 임포트
@@ -14,9 +10,7 @@ import { User } from "./models/user.model.js";
 
 // 유저가 넘긴 좋아하는 사이트를 기준으로 오픈그래프 객체를 생성한다.
 export const getOpenGraph = async (data) => {
-  const targetURL = data
-    .split(" ")
-    .filter((e) => e.startsWith("http"));
+  const targetURL = data.split(" ").filter((e) => e.startsWith("http"));
 
   const url = await axios.get(targetURL[0]);
   const $ = cheerio.load(url.data);
@@ -26,14 +20,13 @@ export const getOpenGraph = async (data) => {
     if ($(el).attr("property")) {
       const KEY = $(el).attr("property").split(":")[1];
       const VALUE = $(el).attr("content");
-      if(KEY !== "url"){
+      if (KEY !== "url") {
         obj[KEY] = VALUE;
       }
     }
   });
   return obj;
 };
-
 
 // 유저가 넘긴 데이터를 검증한다
 export function validationUserData(data) {
@@ -56,17 +49,15 @@ export const ChangeNumberToAster = (personal) => {
 };
 
 export async function checkTokenIsTrue(phone) {
-  const token = await Token.findOne({ phone: phone })
-  return token.isAuth
+  const token = await Token.findOne({ phone: phone });
+  return token.isAuth;
 }
 
 // 회원가입 템플릿을 만든다.
-export const getWelcomeTemplate = ( name, phone, prefer ) => {
+export const getWelcomeTemplate = (name, phone, prefer) => {
   // Create createdAt
   let createdAt = new Date();
-  createdAt = `${createdAt.getFullYear()}-${
-    createdAt.getMonth() + 1
-  }-${createdAt.getDate()}`;
+  createdAt = `${createdAt.getFullYear()}-${createdAt.getMonth() + 1}-${createdAt.getDate()}`;
   return `
             <html>
                 <body>
@@ -129,17 +120,17 @@ export async function createUser(data) {
     phone: phone,
     og: og,
   });
-  
+
   await user
     .save()
     .then((savedData) => {
-      id = savedData._id.toString()
-      const sname = savedData.name
-      const sphone = savedData.phone
-      const sprefer = savedData.prefer
-      const semail = savedData.email
-      const template = getWelcomeTemplate(sname, sphone, sprefer)
-      sendToWelcomeEmail(semail, template)
+      id = savedData._id.toString();
+      const sname = savedData.name;
+      const sphone = savedData.phone;
+      const sprefer = savedData.prefer;
+      const semail = savedData.email;
+      const template = getWelcomeTemplate(sname, sphone, sprefer);
+      sendToWelcomeEmail(semail, template);
     })
     .catch((err) => {
       return err;
