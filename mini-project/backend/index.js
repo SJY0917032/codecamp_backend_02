@@ -17,13 +17,13 @@ import mongoose from "mongoose";
 // 회원가입 관련
 import { createUser, validationUserData, checkTokenIsTrue } from "./signup.js";
 // 핸드폰 인증관련
-import { checkPhone, createToken, checkToken,sendTokenToPhone } from "./phone.js";
-// 유틸 
-import { validationPhone } from "./utils.js"
+import { checkPhone, createToken, checkToken, sendTokenToPhone } from "./phone.js";
+// 유틸
+import { validationPhone } from "./utils.js";
 // 회원
-import { getUsers} from "./users.js"
+import { getUsers } from "./users.js";
 // 커피
-import { getCoffee} from "./coffee.js"
+import { getCoffee } from "./coffee.js";
 
 // 환경변수
 dotenv.config();
@@ -42,7 +42,7 @@ app.post("/user", async (req, res) => {
   const isValid = validationUserData(user);
   // 검증끝난 유저 핸드폰 검증
   if (isValid) {
-    const checkPhoneAndToken = await checkTokenIsTrue(user.phone)
+    const checkPhoneAndToken = await checkTokenIsTrue(user.phone);
     console.log(checkPhoneAndToken);
     if (checkPhoneAndToken) {
       // 회원가입시키기
@@ -94,14 +94,14 @@ app.patch("/tokens/phone", (req, res) => {
 // 회원 가져옴
 app.get("/users", async (req, res) => {
   const Users = await getUsers();
-  res.send([...Users])
-})
+  res.send([...Users]);
+});
 
 // 커피들 가져옴
-app.get("/starbucks", async(req,res) => {
-  const Coffee = await getCoffee()
-  res.send([...Coffee])
-})
+app.get("/starbucks", async (req, res) => {
+  const Coffee = await getCoffee();
+  res.send([...Coffee]);
+});
 
 mongoose.connect("mongodb://my-database:27017/camp");
 
