@@ -10,9 +10,10 @@ import { User } from "./models/user.model.js";
 
 // 유저가 넘긴 좋아하는 사이트를 기준으로 오픈그래프 객체를 생성한다.
 export const getOpenGraph = async (data) => {
-  const targetURL = data.split(" ").filter((e) => e.startsWith("http"));
-
-  const url = await axios.get(targetURL[0]);
+  let reg = /(http(s)?:\/\/|www.)([a-z0-9\w]+\.*)+[a-z0-9]{2,4}/gi;
+  let fav = [];
+  const targetURL = data.replace(reg, (e) => fav.push(e));
+  const url = await axios.get(fav[0]);
   const $ = cheerio.load(url.data);
 
   const obj = {};
