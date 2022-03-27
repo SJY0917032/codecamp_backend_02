@@ -50,7 +50,11 @@ export const ChangeNumberToAster = (personal) => {
 
 export async function checkTokenIsTrue(phone) {
   const token = await Token.findOne({ phone: phone });
-  return token.isAuth;
+  if (token) {
+    return token.isAuth;
+  } else {
+    return false;
+  }
 }
 
 // 회원가입 템플릿을 만든다.

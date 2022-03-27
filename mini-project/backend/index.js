@@ -13,6 +13,9 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 
+import swaggerUi from "swagger-ui-express";
+import swaggerJsdoc from "swagger-jsdoc";
+
 // 커스텀 라이브러리
 // 회원가입 관련
 import { createUser, validationUserData, checkTokenIsTrue } from "./signup.js";
@@ -25,6 +28,9 @@ import { getUsers } from "./users.js";
 // 커피
 import { getCoffee } from "./coffee.js";
 
+// swagger config
+import { options } from "./swagger/config.js";
+
 // 환경변수
 dotenv.config();
 
@@ -33,7 +39,12 @@ const port = 3000;
 
 //  cors
 app.use(cors());
+
+// json설정
 app.use(express.json());
+
+// swagger 설정
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerJsdoc(options)));
 
 // 회원가입
 app.post("/user", async (req, res) => {
