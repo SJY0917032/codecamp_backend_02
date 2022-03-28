@@ -1,10 +1,10 @@
 class MyCar {
-  Model = "";
-  HorsePower = 0;
-  Color = "";
+  Model = "Damas";
+  HorsePower = 1;
+  Color = "YongDalBlue";
 
   StartToCar = () => {
-    console.log(`${this.Model}이 ${this.HorsePower}마력의 속도로 출발했습니다!`);
+    console.log(`${this.Model}이(가) ${this.HorsePower}마력의 속도로 출발했습니다!`);
   };
 
   StopToCar = () => {
