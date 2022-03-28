@@ -1,0 +1,30 @@
+version: "3.7"
+
+services:
+  # 서비스명
+  my-backend:
+    # Dockerfile
+    build:
+      # 위치
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    volumes:
+      #  도커 밖(원본) : 도커 안(도커내부)
+      - ./index.js:/myfolder/index.js
+      - ./controllers/token.controller.js:/myfolder/controllers/token.controller.js
+      - ./controllers/user.controller.js:/myfolder/controllers/user.controller.js
+      - ./controllers/services/signup.service.js:/myfolder/controllers/services/signup.service.js
+      - ./controllers/services/token.service.js:/myfolder/controllers/services/token.service.js
+      - ./controllers/services/util.service.js:/myfolder/controllers/services/util.service.js
+      - ./coffee.js:/myfolder/coffee.js
+      - ./swagger/config.js:/myfolder/swagger/config.js
+      - ./swagger/starbucks.swagger.js:/myfolder/swagger/starbucks.swagger.js
+      - ./swagger/tokens.swagger.js:/myfolder/swagger/tokens.swagger.js
+      - ./swagger/users.swagger.js:/myfolder/swagger/users.swagger.js
+
+  my-database:
+    image: mongo:latest
+    ports:
+      - 27017:27017
