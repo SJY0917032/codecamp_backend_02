@@ -1,18 +1,9 @@
-/**
- *
- * 회원가입 API (POST)
- * 회원 목록 조회 API (GET)
- * 토큰 인증 요청 API (POST)
- * 인증 완료 API (PATCH)
- * 스타벅스 커피 목록 조회 API (GET)
- *
- */
-
 import cors from "cors";
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 
+// 스웨거
 import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
 
@@ -51,10 +42,9 @@ app.post("/user", async (req, res) => {
   const user = req.body;
   // 유저검증
   const isValid = validationUserData(user);
-  // 검증끝난 유저 핸드폰 검증
   if (isValid) {
+    // 검증끝난 유저 핸드폰 검증
     const checkPhoneAndToken = await checkTokenIsTrue(user.phone);
-    console.log(checkPhoneAndToken);
     if (checkPhoneAndToken) {
       // 회원가입시키기
       const result = await createUser(user);
@@ -87,8 +77,10 @@ app.patch("/tokens/phone", (req, res) => {
   const token = req.body.token;
 
   //  인증한 데이터를 검증한다.
+  // 인증한 데이터 - 폰이 존재하는지 먼저 검증한다.
   checkPhone(phone)
     .then(() => {
+      // 핸드폰이 존재한다면 토큰의 상태를체크한다.
       checkToken(phone, token)
         .then((data) => {
           res.send(data);
@@ -117,7 +109,7 @@ app.get("/starbucks", async (req, res) => {
 mongoose.connect("mongodb://my-database:27017/camp");
 
 app.listen(port, () => {
-  console.log("========================");
-  console.log(`서버 정상 실행중. ${port}`);
-  console.log("========================");
+  console.log("===============================");
+  console.log(`${port}번 포트 에서 서버 정상 실행중.`);
+  console.log("===============================");
 });

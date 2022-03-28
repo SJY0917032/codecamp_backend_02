@@ -3,7 +3,7 @@
  * /user:
  *   post:
  *     summary: 회원가입입니다.
- *     tags: [Users]
+ *     tags: [users]
  *     requestBody:
  *       content:
  *         application/json:
@@ -18,7 +18,7 @@
  *                 example: example@example.com
  *               personal:
  *                 type: string
- *                 example: 9809171055722
+ *                 example: 1011011122334
  *               prefer:
  *                 type: string
  *                 example: https://naver.com
@@ -46,7 +46,7 @@
  * /users:
  *   get:
  *     summary: 전체 회원 목록을 조회합니다
- *     tags: [Users]
+ *     tags: [users]
  *     responses:
  *       200:
  *           description: 성공
@@ -56,18 +56,6 @@
  *                 type: array
  *                 items:
  *                   properties:
- *                     og:
- *                       type: object
- *                       properties:
- *                         title:
- *                           type: string
- *                           example: 네이버
- *                         description:
- *                           type: string
- *                           example: 네이버 메인에서 다양한 정보와 유용한 컨텐츠를 만나 보세요
- *                         image:
- *                           type: string
- *                           example: https://s.pstatic.net/static/www/mobile/edit/2016/0705/mobile_212852414260.png
  *                     _id:
  *                       type: string
  *                       example: 62402e7523ab19452af47f60
@@ -82,7 +70,7 @@
  *                       description: 가입한 유저의 email
  *                     personal:
  *                       type: string
- *                       example: 101101-1122334
+ *                       example: 1011011122334
  *                       description: 가입한 유저의 주민번호입니다.
  *                     prefer:
  *                       type: string
@@ -96,7 +84,20 @@
  *                       type: string
  *                       example: '01012345678'
  *                       description: 가입한 유저의 핸드폰 번호입니다.
+ *                     og:
+ *                       type: object
+ *                       properties:
+ *                         title:
+ *                           type: string
+ *                           example: 네이버
+ *                         description:
+ *                           type: string
+ *                           example: 네이버 메인에서 다양한 정보와 유용한 컨텐츠를 만나 보세요
+ *                         image:
+ *                           type: string
+ *                           example: https://s.pstatic.net/static/www/mobile/edit/2016/0705/mobile_212852414260.png
  *                     __v:
  *                       type: int
  *                       example: 0
+
  */

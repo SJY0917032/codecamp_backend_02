@@ -3,7 +3,7 @@
  * /tokens/phone:
  *   post:
  *     summary: 토큰 인증을 요청합니다.
- *     tags: [Tokens]
+ *     tags: [tokens]
  *     requestBody:
  *       content:
  *         application/json:
@@ -23,7 +23,7 @@
  *                 example: 토큰을 전송했습니다.
  *   patch:
  *     summary: 받은 토큰번호로 인증을 요청합니다.
- *     tags: [Tokens]
+ *     tags: [tokens]
  *     requestBody:
  *       content:
  *         application/json:
@@ -46,9 +46,9 @@
  *                 example: true
  *               examples:
  *                 success:
- *                   summary: 성공하면 true값을 리턴 받습다다
+ *                   summary: 인증성공
  *                   value: true
  *                 error:
- *                   summary: 실패시 false값을 리턴 받습니다.
+ *                   summary: 인증실패
  *                   value: false
  */

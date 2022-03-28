@@ -1,12 +1,10 @@
 import axios from "axios";
-import { Token } from "./models/token.model.js"
+import { Token } from "./models/token.model.js";
 
 // 토큰 생성
 export function createToken() {
   const COUNT = 6;
-  const token = String(
-    Math.floor(Math.random() * Math.pow(10, COUNT))
-  ).padStart(COUNT, "0");
+  const token = String(Math.floor(Math.random() * Math.pow(10, COUNT))).padStart(COUNT, "0");
   return token;
 }
 
@@ -17,7 +15,7 @@ export async function sendTokenToPhone(phone, token) {
   const SENDER = process.env.SMS_SENDER;
 
   // 토큰이 존재하는지 체크.
-  const validationToken = await Token.exists({phone:phone})
+  const validationToken = await Token.exists({ phone: phone });
 
   // 토큰이 존재하지 않으면 디비에 저장한다.
   if (!validationToken) {
@@ -42,7 +40,7 @@ export async function sendTokenToPhone(phone, token) {
     console.log(`기존 핸드폰 ${phone}이 존재해 토큰을 갱신합니다.`);
   }
 
-//   생성한토큰을 들어온 핸드폰 번호로 전송한다.
+  //   생성한토큰을 들어온 핸드폰 번호로 전송한다.
   const tokenData = await axios.post(
     // This Endpoint
     `https://api-sms.cloud.toast.com/sms/v3.0/appKeys/${APP_KEY}/sender/sms`,
@@ -62,41 +60,40 @@ export async function sendTokenToPhone(phone, token) {
     }
   );
 
-  console.log(`send To Phone : ${phone} : ${token}`)
+  console.log(`send To Phone : ${phone} : ${token}`);
 }
 
 export async function checkPhone(phone) {
-    const validationTokenToPhone = await Token.exists({ phone: phone });
-    if (validationTokenToPhone === null) {
-      return new Promise((reject) => {
-        reject(false);
-      });
-    } else {
-      return new Promise((resolve) => {
-        resolve(true);
-      });
-    }
+  const validationTokenToPhone = await Token.exists({ phone: phone });
+  if (validationTokenToPhone === null) {
+    return new Promise((reject) => {
+      reject(false);
+    });
+  } else {
+    return new Promise((resolve) => {
+      resolve(true);
+    });
   }
+}
 
-  export async function checkToken(phone, token) {
-    const validationToken = await Token.exists({ phone: phone, token: token });
-    if (validationToken === null) {
-      return new Promise((reject) => {
-        reject(false);
-      });
-    } else {
-      await Token.update(
-        { phone: phone },
-        {
-          $set: {
-            isAuth: true,
-          },
-        }
-      );
-      console.log("인증이 완료됐습니다.");
-      return new Promise((resolve) => {
-        resolve(true);
-      });
-    }
+export async function checkToken(phone, token) {
+  const validationToken = await Token.exists({ phone: phone, token: token });
+  if (validationToken === null) {
+    return new Promise((reject) => {
+      reject(false);
+    });
+  } else {
+    await Token.update(
+      { phone: phone },
+      {
+        $set: {
+          isAuth: true,
+        },
+      }
+    );
+    console.log("인증이 완료됐습니다.");
+    return new Promise((resolve) => {
+      resolve(true);
+    });
   }
-
+}

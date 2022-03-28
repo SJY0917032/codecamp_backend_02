@@ -3,7 +3,7 @@
  * /starbucks:
  *   get:
  *     summary: 스타벅스 커피 크롤링 데이터를 조회합니다
- *     tags: [Starbucks]
+ *     tags: [starbucks]
  *     responses:
  *       200:
  *           description: 성공
