@@ -24,4 +24,7 @@ codecamp **{B}** 2기
 │  ├─homework : 숙제
 │  │   │
 │  │   └─ day : 일자별 숙제
+│  │
+│  │
+│  ├─mini-project : 미니프로젝트
 ```
