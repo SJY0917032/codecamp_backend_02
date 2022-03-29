@@ -10,21 +10,35 @@
 단, 작업을 500번을 반복해도 1이 되지 않는다면 –1을 반환해 주세요.
 */
 function solution(num) {
-  var answer = 0;
-  // 몇번이나 반복해야지
-  var count = 0;
-  // 무한반복 -> 숫자가 1이되거나 반복횟수가 500번이 될때까지
-  while (num !== 1 && count !== 500) {
-    // 짝수면 나누고
-    if (num % 2 === 0) {
-      num = num / 2;
-      count++;
-      // 홀수면 곱해서 더하기
+  // var answer = 0;
+  // // 몇번이나 반복해야지
+  // var count = 0;
+  // // 무한반복 -> 숫자가 1이되거나 반복횟수가 500번이 될때까지
+  // while (num !== 1 && count !== 500) {
+  //   // 짝수면 나누고
+  //   if (num % 2 === 0) {
+  //     num = num / 2;
+  //     count++;
+  //     // 홀수면 곱해서 더하기
+  //   } else {
+  //     num = num * 3 + 1;
+  //     count++;
+  //   }
+  // }
+  // // 500넘엇으면 -1, 아니면 횟수를 리턴
+  // return count >= 500 ? (answer = -1) : (answer = count);
+
+  // 리팩터링 리듀스 활용
+  let answer = 0;
+
+  const countReduce = new Array(500).fill(1).reduce((acc, cur) => {
+    if (acc !== 1) {
+      answer++;
+      return acc % 2 == 0 ? acc / 2 : acc * 3 + 1;
     } else {
-      num = num * 3 + 1;
-      count++;
+      return 1;
     }
-  }
-  // 500넘엇으면 -1, 아니면 횟수를 리턴
-  return count >= 500 ? (answer = -1) : (answer = count);
+  }, num);
+
+  return countReduce !== 1 ? -1 : answer;
 }
