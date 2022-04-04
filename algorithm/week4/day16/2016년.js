@@ -30,6 +30,7 @@ function solution(a, b) {
     case 6:
       answer = "SAT";
       break;
+    // 테트용
   }
   return answer;
 }
