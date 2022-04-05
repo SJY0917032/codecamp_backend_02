@@ -1,0 +1,69 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type MainCategory {
+  id: String!
+  name: String!
+}
+
+type SubCategory {
+  id: String!
+  name: String!
+  mainCategory: [MainCategory!]!
+}
+
+type Subscribe {
+  id: String!
+  title: String!
+  year: Int!
+  month: Int!
+  price: Int!
+  isActive: Boolean!
+  products: [Product!]
+}
+
+type Product {
+  id: String!
+  name: String!
+  subCategory: SubCategory
+  subscribes: [Subscribe!]
+}
+
+type Query {
+  fetchProducts: [Product!]!
+  fetchProduct(productId: String!): Product!
+  fetchSubscribes: [Subscribe!]!
+  fetchSubscribe(subscribeId: String!): Subscribe!
+}
+
+type Mutation {
+  createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
+  createSubscribe(createSubscribeInput: CreateSubscribeInput!): Subscribe!
+  updateSubscribe(subscribeId: String!, updateSubscribeInput: UpdateSubscribeInput!): Subscribe!
+}
+
+input CreateProductInput {
+  name: String!
+}
+
+input UpdateProductInput {
+  name: String
+}
+
+input CreateSubscribeInput {
+  title: String!
+  year: Int!
+  month: Int!
+  price: Int!
+  isActive: Boolean
+}
+
+input UpdateSubscribeInput {
+  title: String
+  year: Int
+  month: Int
+  price: Int
+  isActive: Boolean
+}
