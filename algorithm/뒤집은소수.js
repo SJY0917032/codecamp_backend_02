@@ -11,17 +11,17 @@ const f = (n, numbers) => {
 
   let temp = numbers.map((e) => {
     st = String(e).split("").reverse();
-    st.forEach(e => {
-        if (e.indexOf("0") == 0){
-            st.shift();
-        }
-    })
+    st.forEach((e) => {
+      if (e.indexOf("0") == 0) {
+        st.shift();
+      }
+    });
     st = Number(st.join(""));
     for (k = 2; k < st - 1; k++) {
-        if (st % k === 0) {
-          return 0;
-        }
+      if (st % k === 0) {
+        return 0;
       }
+    }
     return st;
   });
 
