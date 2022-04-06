@@ -2,5 +2,8 @@
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "prettier.trailingComma": "all",
-  "prettier.tabWidth": 2
+  "prettier.tabWidth": 2,
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  }
 }
