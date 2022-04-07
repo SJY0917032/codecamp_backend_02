@@ -105,7 +105,7 @@ export class ProductService {
     // this.productRepository.update({ id: productId }, { deletedAt: new Date() });
 
     // 3. soft-deleted(Type-ORM) softRemove
-    this.productRepository.softRemove({ id: productId }); // id로만 삭제
+    // this.productRepository.softRemove({ id: productId }); // id로만 삭제
 
     // 4. soft-deleted(Type-ORM) softDelete
     const result = await this.productRepository.softDelete({ id: productId }); // 다양한 조건으로 삭제가능.
