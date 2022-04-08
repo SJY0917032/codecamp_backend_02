@@ -1,6 +1,7 @@
 import { Injectable,UnprocessableEntityException, } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
+import { Payment } from '../payments/entities/payment.entity'
 import { User } from './entities/user.entity'
 
 @Injectable()
@@ -8,7 +9,10 @@ export class UserService {
     constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Payment)
+    private readonly paymentRepository: Repository<Payment>
     ){}
+
 
     async findAll(){
         return await this.userRepository.find()
@@ -25,10 +29,17 @@ export class UserService {
     }
 
     async create({createUserInput}){
-        const result = await this.userRepository.save({
-            ...createUserInput
+        const { payment, ...user } = createUserInput
+
+        const result = await this.paymentRepository.save({
+            ...payment
         })
-        return result
+
+        return await this.userRepository.save({
+            ...user,
+            payment: result
+        })
+        
     }
 
     async update({userId,updateUserInput}){

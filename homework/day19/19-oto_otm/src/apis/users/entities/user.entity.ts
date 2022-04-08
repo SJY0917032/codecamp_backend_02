@@ -1,6 +1,6 @@
 import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
-import { isEnumType } from 'graphql';
-import { Column, DeleteDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Payment } from 'src/apis/payments/entities/payment.entity';
+import { Column, DeleteDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 
 
@@ -37,6 +37,12 @@ export class User {
   @Column({type: 'varchar', length:13, unique:true})
   @Field(() => String)
   phone: string;
+
+  @JoinColumn()
+  @OneToOne(() => Payment)
+  @Field(() => Payment)
+  payment : Payment
+
 
   @Column({
     type:'enum',
