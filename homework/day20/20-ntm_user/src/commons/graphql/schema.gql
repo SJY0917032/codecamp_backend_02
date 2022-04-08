@@ -1,0 +1,150 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type MainCategory {
+  id: String!
+  name: String!
+  deletedAt: DateTime
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type SubCategory {
+  id: String!
+  name: String!
+  mainCategory: MainCategory!
+  deletedAt: DateTime
+}
+
+type Subscribe {
+  id: String!
+  title: String!
+  year: Int!
+  month: Int!
+  price: Int!
+  deletedAt: DateTime
+  products: [Product!]
+}
+
+type Product {
+  id: String!
+  name: String!
+  deletedAt: DateTime
+  subCategory: SubCategory!
+  subscribes: [Subscribe!]
+}
+
+type Payment {
+  id: String!
+  name: String!
+}
+
+type User {
+  id: String!
+  email: String!
+  name: String!
+  phone: String!
+  payment: Payment!
+  roles: RolseFormat!
+  deletedAt: DateTime
+}
+
+enum RolseFormat {
+  USER
+  ADMIN
+}
+
+type UserSubscribe {
+  subscribe: Subscribe!
+  user: User!
+  deletedAt: DateTime
+}
+
+type Query {
+  fetchProducts: [Product!]!
+  fetchProductsWithDeleted: [Product!]!
+  fetchProduct(productId: String!): Product!
+  fetchSubscribes: [Subscribe!]!
+  fetchSubscribesWithDeleted: [Subscribe!]!
+  fetchSubscribe(subscribeId: String!): Subscribe!
+  fetchUsers: [User!]!
+  fetchUsersWithDeleted: [User!]!
+  fetchUser(userId: String!): User!
+  fetchUserSubscribes: [UserSubscribe!]!
+  fetchUserSubscribesWtihDeleted: [UserSubscribe!]!
+  fetchUserSubscribe: UserSubscribe!
+}
+
+type Mutation {
+  createProduct(createProductInput: CreateProductInput!): Product!
+  updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
+  restoreProduct(productId: String!): Boolean!
+  deleteProduct(productId: String!): Boolean!
+  createMainCategory(name: String!): MainCategory!
+  deleteMainCategory(mainCategoryId: String!): Boolean!
+  createSubCategory(name: String!, mainCategoryId: String!): SubCategory!
+  deleteSubCategory(subCategoryId: String!): Boolean!
+  createSubscribe(createSubscribeInput: CreateSubscribeInput!): Subscribe!
+  updateSubscribe(subscribeId: String!, updateSubscribeInput: UpdateSubscribeInput!): Subscribe!
+  restoreSubscribe(subscribeId: String!): Boolean!
+  deleteSubscribe(subscribeId: String!): Boolean!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(userId: String!, updateUserInput: UpdateUserInput!): User!
+  restoreUser(userId: String!): Boolean!
+  deleteUser(userId: String!): Boolean!
+  createUserSubscribes(subscribeId: String!, userId: String!): UserSubscribe!
+  restoreUserSubscribe(usersubscribesId: String!): Boolean!
+  deleteUserSubscribes(usersubscribesId: String!): Boolean!
+}
+
+input CreateProductInput {
+  name: String!
+  subCategoryId: String!
+}
+
+input UpdateProductInput {
+  name: String
+  subCategoryId: String
+}
+
+input CreateSubscribeInput {
+  title: String!
+  year: Int!
+  month: Int!
+  price: Int!
+  isActive: Boolean
+  products: [CreateProductInput!]!
+}
+
+input UpdateSubscribeInput {
+  title: String
+  year: Int
+  month: Int
+  price: Int
+  isActive: Boolean
+  products: [CreateProductInput!]
+}
+
+input CreateUserInput {
+  email: String!
+  name: String!
+  phone: String!
+  payment: CreatePaymentInput!
+  roles: RolseFormat!
+}
+
+input CreatePaymentInput {
+  name: String!
+}
+
+input UpdateUserInput {
+  email: String
+  name: String
+  phone: String
+  payment: CreatePaymentInput
+  roles: RolseFormat
+}
