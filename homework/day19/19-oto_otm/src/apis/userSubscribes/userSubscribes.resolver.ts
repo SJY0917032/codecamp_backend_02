@@ -30,7 +30,7 @@ export class UserSubscribesResolver {
     return this.userSubscribesService.create({ subscribeId, userId });
   }
 
-  @Mutation(() => UserSubscribe)
+  @Mutation(() => Boolean)
   async restoreUserSubscribe(
     @Args('usersubscribesId') usersubscribesId: string, //
   ){

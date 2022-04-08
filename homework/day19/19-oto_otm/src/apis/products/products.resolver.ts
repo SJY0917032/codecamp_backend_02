@@ -40,7 +40,7 @@ export class ProductResolver {
     return this.productService.update({ productId, updateProductInput });
   }
 
-  @Mutation(() => Product)
+  @Mutation(() => Boolean)
   async restoreProduct(
     @Args('productId') productId: string,
   ){

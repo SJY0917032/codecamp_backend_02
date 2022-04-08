@@ -40,7 +40,7 @@ export class UserResolver {
         return this.userService.update({userId, updateUserInput})
     }
 
-    @Mutation(() => User)
+    @Mutation(() => Boolean)
     async restoreUser(
         @Args('userId') userId: string,//
     ){

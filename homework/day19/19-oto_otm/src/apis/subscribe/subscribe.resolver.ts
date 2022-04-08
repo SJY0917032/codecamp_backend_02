@@ -46,7 +46,7 @@ export class SubscribeResolver{
         return this.subscribeService.update({ subscribeId, updateSubscribeInput })
     }
 
-    @Mutation(() => Subscribe)
+    @Mutation(() => Boolean)
     async restoreSubscribe(
         @Args('subscribeId') subscribeId: string, //
     ){
