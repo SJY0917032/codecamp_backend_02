@@ -1,0 +1,24 @@
+version: '3.7'
+
+services:
+  # 서비스명
+  my-backend:
+    # Dockerfile
+    build:
+      # 위치
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3001:3001
+    volumes:
+      #  도커 밖(원본) : 도커 안(도커내부)
+      - ./src:/myfolder/src
+
+  my-database:
+    platform: linux/x86_64
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: 'mydocker02'
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - 3306:3306
