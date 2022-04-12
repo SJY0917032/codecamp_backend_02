@@ -149,3 +149,5 @@ dist
 # End of https://www.toptal.com/developers/gitignore/api/node
 .DS_Store
 .DS_Store
+main-project/backend/src/commons/auth/jwt-google-strategy.ts
+class/22/22-03-login-google/backend/src/commons/auth/jwt-google-strategy.ts
