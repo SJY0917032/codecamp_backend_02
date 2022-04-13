@@ -10,7 +10,6 @@ import { UserModule } from './apis/users/user.module';
 import { UserSubscribesModule } from './apis/userSubscribes/userSubscribes.module';
 import { AuthModule } from './apis/auth/auth.module';
 
-
 @Module({
   imports: [
     ProductModule,
@@ -21,7 +20,7 @@ import { AuthModule } from './apis/auth/auth.module';
     UserSubscribesModule,
     AuthModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
-      driver:ApolloDriver,
+      driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({ req, res }) => ({ req, res }),
     }),
