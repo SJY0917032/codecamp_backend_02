@@ -12,39 +12,72 @@
 실패율이 높은 스테이지부터 내림차순으로 스테이지의 번호가 담겨있는 배열을 return 하도록 solution 함수를 완성하라.
 */
 function solution(N, stages) {
-        // key : 스테이지 
-        // value : 실패율
-        let answer = new Map();
-        // 최종적으로 Return할 배열
-        temp = [];
-        // 스테이지만큼
-        for (i = 1; i < N+1; i++){
-            // ii => 현재 스테이지에서 실패한사람들
-            ii = 0;
-            // jj => 현재 스테이지를 도달한사람들
-            jj = 0;
-            for(j = 0; j < stages.length; j++){
-                if(i === stages[j]){
-                   ii++;
-                }   
-                if(i <= stages[j]){
-                    jj++;
-                }
-            }
-            // 현재스테이지 - (실패율)
-            answer.set(i, (ii / jj))
-        }
-        
-        // 정렬을위해 배열로 바꾼다
-        const mapToArray = [...answer];
-        
-        // value값기준으로 key값을 정렬한다.
-        mapToArray.sort((a,b) => b[1] - a[1])
-        
-        // 최종적으로 리턴할 배열에
-        // 한개씩 push시킨다
-        for (let [key,val] of mapToArray){
-            temp.push(key)
-        }
-       return temp
+  //     // key : 스테이지
+  //     // value : 실패율
+  //     let answer = new Map();
+  //     // 최종적으로 Return할 배열
+  //     temp = [];
+  //     // 스테이지만큼
+  //     for (i = 1; i < N+1; i++){
+  //         // ii => 현재 스테이지에서 실패한사람들
+  //         ii = 0;
+  //         // jj => 현재 스테이지를 도달한사람들
+  //         jj = 0;
+  //         for(j = 0; j < stages.length; j++){
+  //             if(i === stages[j]){
+  //                ii++;
+  //             }
+  //             if(i <= stages[j]){
+  //                 jj++;
+  //             }
+  //         }
+  //         // 현재스테이지 - (실패율)
+  //         answer.set(i, (ii / jj))
+  //     }
+  //     // 정렬을위해 배열로 바꾼다
+  //     const mapToArray = [...answer];
+  //     // value값기준으로 key값을 정렬한다.
+  //     mapToArray.sort((a,b) => b[1] - a[1])
+  //     // 최종적으로 리턴할 배열에
+  //     // 한개씩 push시킨다
+  //     for (let [key,val] of mapToArray){
+  //         temp.push(key)
+  //     }
+  //    return temp
+
+  // 리팩터링 - 객체형식으로
+  // 스테이지를 오름차순으로 정렬
+  stages.sort((a, b) => a - b);
+  const infos = [];
+  for (let i = 1; i <= N; i++) {
+    infos.push({
+      stage: i, // 현재스테이지의번호
+      users: 0, // 클리어하지 못한 유저 (플레이중)
+      fail: 0, // 스테이지의 실패율
+    });
+  }
+
+  let allUsers = stages.length; // 모든 유저의 수(초기값)
+  for (let i = 0; i < stages.length; i++) {
+    // undefine 방지
+    if (infos[stages[i] - 1]) {
+      infos[stages[i] - 1].users++;
+      // 현재 스테이지 번호와 다음 스테이지의 번호가 일치하지 않다면
+      if (stages[i] !== stages[i + 1]) {
+        const fail = infos[stages[i] - 1].users / allUsers;
+        // 유저수를 빼준다
+        allUsers -= infos[stages[i] - 1].users;
+        infos[stages[i] - 1].fail = fail;
+      }
     }
+  }
+
+  // 최종적으로 나온 데이터를 이용해서
+  // 내림차순으로 정렬후,
+  // 스테이지번호만 반환시켜준다.
+  return infos
+    .sort((a, b) => {
+      return b.fail - a.fail;
+    })
+    .map((el) => el.stage);
+}
