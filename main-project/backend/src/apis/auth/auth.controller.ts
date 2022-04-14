@@ -1,5 +1,4 @@
 import { User } from '../users/entities/user.entity';
-import { UserService } from '../users/user.service';
 import { AuthService } from './auth.service';
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
