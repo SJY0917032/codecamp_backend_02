@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<htm lang="ko">
+
+    <head>
+        <!-- jQuery -->
+        <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+        <!-- iamport.payment.js -->
+        <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
+        <!-- AXIOS -->
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <title>payments-test</title>
+        <script>
+
+            function requestPay() {
+                // IMP.request_pay(param, callback) 결제창 호출
+                const suid = "d9271ce9-b791-4f58-b6f2-db5973a7f732"
+                const IMP = window.IMP; // 생략 가능
+                IMP.init("imp85786204"); // Example: imp00000000
+                IMP.request_pay({ // param
+                    pg: "html5_inicis",
+                    pay_method: "card",
+                    // merchant_uid: "ORD20180131-0000011",
+                    // 생략하면 아임포트에서 만들어준다.
+                    name: "견",
+                    amount: 100,
+                    buyer_email: "gildong@gmail.com",
+                    buyer_name: "황",
+                    buyer_tel: "010-4242-4242",
+                    buyer_addr: "포항시 강남구 신사동",
+                    buyer_postcode: "01181"
+                }, function (rsp) { // callback
+                    if (rsp.success) {
+                        console.log(rsp)
+                        // 결제 성공 시 로직,
+                        axios.post(
+                            "http://localhost:3001/graphql",
+                            {
+                                query: `
+                                    mutation {
+                                        createOrder(impUid: "${rsp.imp_uid}", subscribeId: "${suid}"){
+                                            id
+                                            impUid
+                                        }
+                                    }
+                                `,
+                            },
+                            {
+                                headers: {
+                                    Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJzdWIiOiIwYjE5ZDBjZC02YmIxLTRlZmEtOTZjZS1lNTUxZjQzZDliNjAiLCJuYW1lIjoidGVzdCIsImlhdCI6MTY0OTk0OTQyOCwiZXhwIjoxNjQ5OTUyNDI4fQ.yJCfuXxsojoqRsGchZ7yo36H3Nz62Y4d59tw6mbD5lU"
+                                }
+                            }
+                        )
+                    } else {
+                        console.log("실패?")
+                        // 결제 실패 시 로직,
+                    }
+                })
+            }
+        </script>
+    </head>
+
+    <body>
+        <button onclick="requestPay()"> PUTIN </button>
+    </body>
+
+    </html>

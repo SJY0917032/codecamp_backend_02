@@ -62,7 +62,31 @@ enum RolseFormat {
 type UserSubscribe {
   subscribe: Subscribe!
   user: User!
+  createdAt: DateTime!
   deletedAt: DateTime
+}
+
+type Order {
+  id: String!
+  userSubscribe: UserSubscribe!
+  impUid: String!
+  payment: PaymentFormat
+  createdAt: DateTime
+  shipping: ShippingFormat
+}
+
+enum PaymentFormat {
+  PROCESSING
+  COMPLETE
+  CANCEL
+}
+
+enum ShippingFormat {
+  PREPARE
+  CARGO
+  OTW
+  COMPLETE
+  CANCEL
 }
 
 type Query {
@@ -105,6 +129,7 @@ type Mutation {
   deleteUserSubscribes(usersubscribesId: String!): Boolean!
   login(email: String!, password: String!): String!
   restoreAccessToken: String!
+  createOrder(impUid: String!, subscribeId: String!): Order!
 }
 
 input CreateProductInput {
@@ -141,7 +166,7 @@ input CreateUserInput {
   phone: String!
   password: String!
   payment: CreatePaymentInput
-  roles: RolseFormat!
+  roles: RolseFormat
 }
 
 input CreatePaymentInput {

@@ -9,6 +9,7 @@ import { SubCategoryModule } from './apis/subCategorys/subCategory.module';
 import { UserModule } from './apis/users/user.module';
 import { UserSubscribesModule } from './apis/userSubscribes/userSubscribes.module';
 import { AuthModule } from './apis/auth/auth.module';
+import { OrderModule } from './apis/order/order.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { AuthModule } from './apis/auth/auth.module';
     UserModule,
     UserSubscribesModule,
     AuthModule,
+    OrderModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',

@@ -6,11 +6,7 @@ import { Strategy, Profile } from 'passport-google-oauth20';
 export class JwtGoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor() {
     super({
-      clientID:
-        '488967728040-b5dcgiek06ps332i87hk0rfqk71vldm8.apps.googleusercontent.com',
-      clientSecret: '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',
-      callbackURL: 'http://localhost:3001/login/google',
-      scope: ['email', 'profile'],
+      
     }); // 검증부
   }
 

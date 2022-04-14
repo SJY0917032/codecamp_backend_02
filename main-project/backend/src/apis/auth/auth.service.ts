@@ -8,12 +8,12 @@ import { v4 } from 'uuid';
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService, //
-    private readonly userService: UserService
-    ) {}
+    private readonly userService: UserService,
+  ) {}
   getAccessToken({ user }) {
     const accessToken = this.jwtService.sign(
-      { email: user.email, sub: user.id , name : user.name},
-      { secret: 'myAccessKey', expiresIn: '2m' },
+      { email: user.email, sub: user.id, name: user.name },
+      { secret: 'myAccessKey', expiresIn: '50m' },
     );
     return accessToken;
   }
@@ -34,8 +34,8 @@ export class AuthService {
     // )
   }
 
-  async socialLogin(req, res){
-    let user = await this.userService.findOne({email: req.user.email})
+  async socialLogin(req, res) {
+    let user = await this.userService.findOne({ email: req.user.email });
     if (!user) {
       const createUser = new CreateUserInput();
       createUser.email = req.user.email;

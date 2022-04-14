@@ -17,9 +17,9 @@ export class AuthResolver {
   async login(
     @Args('email') email: string,
     @Args('password') password: string,
-    @Context() context:any,
+    @Context() context: any,
   ) {
-    console.log(context.res)
+    console.log(context.res);
     // 1. 로그인을한다.(이메일과 비밀번호가 일치하는 유저)
     const user = await this.userService.findOne({ email });
     // 2. 일치하는 유저가 없다면 에러 넘기기.
@@ -31,7 +31,7 @@ export class AuthResolver {
     if (!isAuth) throw new UnprocessableEntityException('암호가 틀렸습니다.');
 
     // 4. refreshToken(JWT)를 만들어서 FE(Cookie)에 세팅한다.
-    this.authService.setRefreshToken({user, res: context.res})
+    this.authService.setRefreshToken({ user, res: context.res });
 
     // 5. 유저가 맞다면 JWT를 던져준다.
     return this.authService.getAccessToken({ user });

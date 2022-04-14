@@ -61,6 +61,4 @@ export class SubscribeResolver{
         return await this.subscribeService.delete({subscribeId})
     }
 
-
-
 }

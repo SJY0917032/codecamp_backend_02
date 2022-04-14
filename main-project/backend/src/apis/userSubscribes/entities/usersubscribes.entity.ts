@@ -1,7 +1,13 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Subscribe } from 'src/apis/subscribe/entities/subscribe.entity';
 import { User } from 'src/apis/users/entities/user.entity';
-import { DeleteDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -13,11 +19,15 @@ export class UserSubscribe {
 
   @ManyToOne(() => Subscribe)
   @Field(() => Subscribe)
-  subscribe: Subscribe
+  subscribe: Subscribe;
 
   @ManyToOne(() => User)
   @Field(() => User)
-  user: User
+  user: User;
+
+  @CreateDateColumn()
+  @Field(() => Date)
+  createdAt: Date;
 
   @DeleteDateColumn()
   @Field(() => Date, { nullable: true })
