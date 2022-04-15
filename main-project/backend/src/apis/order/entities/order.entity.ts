@@ -49,6 +49,10 @@ export class Order {
   @Field(() => String)
   impUid: string;
 
+  @Column()
+  @Field(() => String)
+  merchantUid: string;
+
   @Column({
     type: 'enum',
     enum: PaymentFormat,

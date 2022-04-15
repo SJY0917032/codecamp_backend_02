@@ -10,10 +10,9 @@
         <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
         <title>payments-test</title>
         <script>
-
             function requestPay() {
                 // IMP.request_pay(param, callback) 결제창 호출
-                const suid = "d9271ce9-b791-4f58-b6f2-db5973a7f732"
+                const suid = "2028dcba-10d8-4adc-80e5-f44fa23550f0"
                 const IMP = window.IMP; // 생략 가능
                 IMP.init("imp85786204"); // Example: imp00000000
                 IMP.request_pay({ // param
@@ -37,7 +36,7 @@
                             {
                                 query: `
                                     mutation {
-                                        createOrder(impUid: "${rsp.imp_uid}", subscribeId: "${suid}"){
+                                        createOrder(impUid: "${rsp.imp_uid}", merchantUid: "${rsp.merchant_uid}",subscribeId: "${suid}"){
                                             id
                                             impUid
                                         }
@@ -46,7 +45,7 @@
                             },
                             {
                                 headers: {
-                                    Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJzdWIiOiIwYjE5ZDBjZC02YmIxLTRlZmEtOTZjZS1lNTUxZjQzZDliNjAiLCJuYW1lIjoidGVzdCIsImlhdCI6MTY0OTk0OTQyOCwiZXhwIjoxNjQ5OTUyNDI4fQ.yJCfuXxsojoqRsGchZ7yo36H3Nz62Y4d59tw6mbD5lU"
+                                    Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJzdWIiOiJiNWMxYzM1Zi0zM2U2LTQzYWQtODMxZS05NWUyMjRkMWI3ODMiLCJuYW1lIjoidGVzdCIsImlhdCI6MTY1MDAxMzA4NiwiZXhwIjoxNjUwMDE2MDg2fQ.pu5nHIJBPkaW670JqqUQeNwejM_YL3rvi1dh-Z4vXSw"
                                 }
                             }
                         )
@@ -56,11 +55,31 @@
                     }
                 })
             }
+            function putout() {
+                const imp_uid = "imp_811799958166"
+                const reason = "그냥그냥그냥"
+                axios.post(
+                    "http://localhost:3001/graphql",
+                    {
+                        query: `
+                                    mutation {
+                                        cancleOrder(impUid: "${imp_uid}", reason: "${reason}")
+                                    }
+                                `,
+                    },
+                    {
+                        headers: {
+                            Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC5jb20iLCJzdWIiOiJiNWMxYzM1Zi0zM2U2LTQzYWQtODMxZS05NWUyMjRkMWI3ODMiLCJuYW1lIjoidGVzdCIsImlhdCI6MTY1MDAxMzA4NiwiZXhwIjoxNjUwMDE2MDg2fQ.pu5nHIJBPkaW670JqqUQeNwejM_YL3rvi1dh-Z4vXSw"
+                        }
+                    }
+                )
+            }
         </script>
     </head>
 
     <body>
         <button onclick="requestPay()"> PUTIN </button>
+        <button onclick="putout()">PUTOUT</button>
     </body>
 
     </html>

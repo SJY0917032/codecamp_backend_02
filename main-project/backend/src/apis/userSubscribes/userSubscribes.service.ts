@@ -47,14 +47,14 @@ export class UserSubscribesService {
 
     return await this.userSubscribeRepository.save({
       subscribe: subscribe,
-      user: user,
+      userId: user,
     });
   }
 
   async createWithOrder({ subscribe, user }) {
     return await this.userSubscribeRepository.save({
       subscribe: subscribe,
-      user: user,
+      userId: user,
     });
   }
 

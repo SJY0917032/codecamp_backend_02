@@ -15,11 +15,33 @@ export class OrderResolver {
   @UseGuards(GqlAuthAccessGuard)
   async createOrder(
     @Args('impUid') impUid: string,
+    @Args('merchantUid') merchantUid: string,
     @Args('subscribeId')
     subscribeId: string,
     @CurrentUser() currentUser: ICurrentUser,
   ) {
     //
-    return await this.orderService.create({ impUid, subscribeId, currentUser });
+    return await this.orderService.create({
+      impUid,
+      merchantUid,
+      subscribeId,
+      currentUser,
+    });
+  }
+
+  @Mutation(() => String)
+  @UseGuards(GqlAuthAccessGuard)
+  async cancleOrder(
+    @Args('impUid') impUid: string,
+    @Args('reason') reason: string,
+    @CurrentUser() currentUser: ICurrentUser,
+  ) {
+    const result = await this.orderService.cancelIamPort({
+      impUid,
+      reason,
+      currentUser,
+    });
+    console.log(result);
+    return 'ok';
   }
 }

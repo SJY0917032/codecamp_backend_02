@@ -1,13 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  ConflictException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { iamPortService } from '../iamport/iamport.service';
 import { Subscribe } from '../subscribe/entities/subscribe.entity';
 import { User } from '../users/entities/user.entity';
 import { UserSubscribe } from '../userSubscribes/entities/usersubscribes.entity';
 import { Order } from './entities/order.entity';
-import { v4 } from 'uuid';
-import { CreateOrderInput } from './dto/createOrderInput';
-import { UserSubscribesService } from '../userSubscribes/userSubscribes.service';
 
 @Injectable()
 export class OrderService {
@@ -20,13 +22,21 @@ export class OrderService {
     private readonly subscribeRepository: Repository<Subscribe>,
     @InjectRepository(UserSubscribe)
     private readonly userSubscribeRepository: Repository<UserSubscribe>,
+    private readonly iamportService: iamPortService,
   ) {}
 
-  async create({ impUid, subscribeId, currentUser }) {
-    //
-    // 1. 유저가 구입을한다.
+  async create({ impUid, merchantUid, subscribeId, currentUser }) {
+    // 토큰가져오기 + 결제정보가져오기도 서비스로 나눈다
 
-    // 들어온 정보로 해당 리포지토리로 검색을한다.
+    // 1. 아임포트 토큰을 가져온다.
+    const token = await this.iamportService.createIamPortToken();
+
+    // 2. 결제정보를 찾는다
+    const iamPortResult = await this.iamportService.searchIamPort({ impUid });
+
+    const amount = iamPortResult.data.response.amount;
+
+    // 3. 프론트에서 넘겨준 제품과 검증이 완료된 유저 정보로 해당 리포지토리로 검색을한다.
     const user = await this.userRepository.findOne({
       id: currentUser.id,
     });
@@ -34,39 +44,75 @@ export class OrderService {
       id: subscribeId,
     });
 
+    // 4. 결제정보 (amonut)와 subscribe()의 가격이 맞는지 확인
+    if (!(amount == subscribe.price)) {
+      throw { status: 'forgery', message: '위조된 결제시도입니다!!!' };
+    } // FIXME 결제취소 완성되면 추가해야한다
+
+    // 결제정보가 맞다면 존재하는지 검증한다.
+    const checkimpUid = await this.orderRepository.findOne({
+      where: { impUid: impUid },
+    });
+
+    // 존재하면에러
+    if (checkimpUid) {
+      throw new ConflictException('이미 등록된 결제입니다.');
+    }
+
     const userSubs = await this.userSubscribeRepository.save({
       subscribe: subscribe,
       user: user,
     });
 
+    console.log(userSubs);
+
     return await this.orderRepository.save({
       impUid: impUid,
+      merchantUid: merchantUid,
       userSubscribe: userSubs,
     });
   }
-}
 
-/*
-    1. 유저가 구입을한다
-    create Order를하면 onetoone으로 걸려있는 유저 구독을만들어준다
-    구독상품과 유저아이디를 가져온것을
-        
-    const createOrder = new Order();
-    
-    const user = await this.userRepository.findOne({
-        id: currentUser.id
-    })
-        const subscribe = await this.subscribeRepository.findOne({
-        id: subscribeId
-    })
+  // 허위로 결제를 만들거나 유저가 취소를 요청했을경우의 아임포트서비스 취소
+  async cancelIamPort({ impUid, reason = '', currentUser }) {
+    // 1. 아임포트 토큰을 가져온다.
+    const token = await this.iamportService.createIamPortToken();
 
-    const usersubscribeId = v4();
-
-    createOrder.usersubscribe = { 
-        id:usersubscribeId,
-        subscribe:subscribe,
-        user:user
+    // 2. 결제정보를 찾는다
+    const iamPortResult = await this.iamportService.searchIamPort({ impUid });
+    if (iamPortResult.data.response.status === 'canclled') {
+      throw new UnprocessableEntityException('이미 취소가된 결제입니다..');
     }
 
-    (구독아이디에는 유저구독테이블이 들어가줘야함)
-*/
+    const currentOrder = await this.orderRepository.findOne({
+      relations: [
+        'userSubscribe',
+        'userSubscribe.user',
+        'userSubscribe.subscribe',
+      ],
+      where: { impUid: impUid },
+    });
+
+    const checkUser = await this.userRepository.findOne({
+      where: { id: currentOrder.userSubscribe.user.id },
+    });
+
+    // 현재유저의 아이디와 현재주문정보의  유저 아이디를 체크한다.
+    if (currentUser.id != checkUser.id) {
+      throw new UnprocessableEntityException(
+        '취소하려는 결제의 유저정보와 현재 유저가 맞지 않습니다.',
+      );
+    }
+
+    const merchant_uid = currentOrder.merchantUid;
+    const checksum = currentOrder.userSubscribe.subscribe.price;
+
+    const cancelResult = await this.iamportService.cancelIamPort({
+      reason,
+      impUid,
+      merchant_uid,
+      checksum,
+    });
+    return cancelResult.data.message;
+  }
+}

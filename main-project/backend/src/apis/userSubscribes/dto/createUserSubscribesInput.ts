@@ -5,8 +5,8 @@ import { User } from 'src/apis/users/entities/user.entity';
 @InputType()
 export class CreatUserSubscribesInput {
   @Field(() => Subscribe)
-  subscribe: Subscribe;
+  subscribeId: Subscribe;
 
   @Field(() => User)
-  user: User;
+  userId: User;
 }

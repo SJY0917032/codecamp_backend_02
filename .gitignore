@@ -151,3 +151,5 @@ dist
 .DS_Store
 class/22/22-03-login-google/backend/src/commons/auth/jwt-google-strategy.ts
 class/23/23-01-point-transaction/request.http
+main-project/request.http
+main-project.zip
