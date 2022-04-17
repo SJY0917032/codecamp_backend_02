@@ -1,10 +1,8 @@
-import {
-    Injectable,
-    UnprocessableEntityException,
-  } from '@nestjs/common';
+  import {
+      Injectable,
+      UnprocessableEntityException,
+    } from '@nestjs/common';
   import axios from 'axios';
-
-  
   import { config } from 'dotenv';
 
   config();

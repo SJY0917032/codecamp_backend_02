@@ -9,7 +9,9 @@ import { iamPortService } from '../iamport/iamport.service';
 import { Subscribe } from '../subscribe/entities/subscribe.entity';
 import { User } from '../users/entities/user.entity';
 import { UserSubscribe } from '../userSubscribes/entities/usersubscribes.entity';
-import { Order } from './entities/order.entity';
+import {PaymentFormat, Order } from './entities/order.entity';
+
+
 
 @Injectable()
 export class OrderService {
@@ -28,8 +30,6 @@ export class OrderService {
   async create({ impUid, merchantUid, subscribeId, currentUser }) {
     // 토큰가져오기 + 결제정보가져오기도 서비스로 나눈다
 
-    // 1. 아임포트 토큰을 가져온다.
-    const token = await this.iamportService.createIamPortToken();
 
     // 2. 결제정보를 찾는다
     const iamPortResult = await this.iamportService.searchIamPort({ impUid });
@@ -47,7 +47,7 @@ export class OrderService {
     // 4. 결제정보 (amonut)와 subscribe()의 가격이 맞는지 확인
     if (!(amount == subscribe.price)) {
       throw { status: 'forgery', message: '위조된 결제시도입니다!!!' };
-    } // FIXME 결제취소 완성되면 추가해야한다
+    } 
 
     // 결제정보가 맞다면 존재하는지 검증한다.
     const checkimpUid = await this.orderRepository.findOne({
@@ -64,8 +64,6 @@ export class OrderService {
       user: user,
     });
 
-    console.log(userSubs);
-
     return await this.orderRepository.save({
       impUid: impUid,
       merchantUid: merchantUid,
@@ -75,9 +73,7 @@ export class OrderService {
 
   // 허위로 결제를 만들거나 유저가 취소를 요청했을경우의 아임포트서비스 취소
   async cancelIamPort({ impUid, reason = '', currentUser }) {
-    // 1. 아임포트 토큰을 가져온다.
-    const token = await this.iamportService.createIamPortToken();
-
+  
     // 2. 결제정보를 찾는다
     const iamPortResult = await this.iamportService.searchIamPort({ impUid });
     if (iamPortResult.data.response.status === 'canclled') {
@@ -113,6 +109,22 @@ export class OrderService {
       merchant_uid,
       checksum,
     });
-    return cancelResult.data.message;
+
+    
+    // 취소상태의 오더를 하나 만들어준다
+    const { id,  ...rest } = currentOrder
+
+    let cancledOrder = new Order()
+
+    cancledOrder.impUid = rest.impUid
+    cancledOrder.merchantUid = rest.merchantUid
+    cancledOrder.payment = PaymentFormat.CANCEL
+    cancledOrder.userSubscribe = rest.userSubscribe
+
+    cancledOrder = await this.orderRepository.save({
+      ...cancledOrder
+    })
+
+    return cancledOrder;
   }
 }
