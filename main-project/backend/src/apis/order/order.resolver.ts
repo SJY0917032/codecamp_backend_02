@@ -29,7 +29,7 @@ export class OrderResolver {
     });
   }
 
-  @Mutation(() => Order)
+  @Mutation(() => Boolean)
   @UseGuards(GqlAuthAccessGuard)
   async cancleOrder(
     @Args('impUid') impUid: string,
