@@ -133,6 +133,8 @@ type Mutation {
   restoreAccessToken: String!
   createOrder(impUid: String!, merchantUid: String!, subscribeId: String!): Order!
   cancleOrder(impUid: String!, reason: String!): Boolean!
+  uploadImage(images: [Upload!]!, productId: String!): [String!]!
+  updateImage(images: [Upload!]!, productId: String!): [String!]!
 }
 
 input CreateProductInput {
@@ -184,3 +186,6 @@ input UpdateUserInput {
   payment: CreatePaymentInput
   roles: RolseFormat
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload

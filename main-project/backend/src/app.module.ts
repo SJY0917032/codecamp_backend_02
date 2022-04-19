@@ -10,6 +10,7 @@ import { UserModule } from './apis/users/user.module';
 import { UserSubscribesModule } from './apis/userSubscribes/userSubscribes.module';
 import { AuthModule } from './apis/auth/auth.module';
 import { OrderModule } from './apis/order/order.module';
+import { ProductImageModule } from './apis/productsImage/productImage.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { OrderModule } from './apis/order/order.module';
     UserSubscribesModule,
     AuthModule,
     OrderModule,
+    ProductImageModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
