@@ -68,7 +68,6 @@ export class ProductImageService {
             url: el,
           });
           res(aaa);
-          rej(console.log('에러발생~'));
         });
         return saveData;
       }),
