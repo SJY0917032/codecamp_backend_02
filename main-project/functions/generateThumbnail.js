@@ -2,14 +2,15 @@
 const { Storage } = require("@google-cloud/storage");
 const sharp = require("sharp");
 
-// gcp 객체를 하나 생성합니다.
+// 구글 클라우드 스토리지 객체를 하나 생성합니다.
 const storage = new Storage();
 
 // 함수 ON
 exports.processThumbImage = async (file, context) => {
-  // 현재 버킷을 찾아서 객체할당한다.
+  // if문으로 썸네일이 들어왔으면 그냥 리턴시켜서 함수를 종료시킨다.
   if (file.name.search(`thumb@`) != -1) return;
 
+  // 현재 버킷을 찾아서 객체할당한다.
   const scrBucket = storage.bucket(file.bucket);
 
   // 변환할 사이즈
@@ -28,9 +29,9 @@ exports.processThumbImage = async (file, context) => {
     if (size == 1280) {
       thumbName = `thumb/l/thumb@${size}_${file.name}`;
     }
+
     // if else로 분기한다.
     // 분기하지 않으면 무한으로 파일이 만들어짐
-
     if (file.name.search(`thumb@`) == -1) {
       // 만약 파일의이름에 썸네일이 들어가있지 않다면
       const gcsObject = scrBucket.file(file.name);

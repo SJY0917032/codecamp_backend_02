@@ -69,9 +69,12 @@ export class ProductImageService {
           });
           res(aaa);
         });
+        console.log(saveData)
         return saveData;
       }),
     );
+
+    
 
     return results;
   }
