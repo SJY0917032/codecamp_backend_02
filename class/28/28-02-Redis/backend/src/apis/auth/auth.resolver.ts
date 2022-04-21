@@ -45,4 +45,5 @@ export class AuthResolver {
   ) {
     return this.authService.getAccessToken({ user: currentUser });
   }
+
 }
