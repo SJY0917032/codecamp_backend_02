@@ -6,6 +6,7 @@ import { Storage } from '@google-cloud/storage';
 import { config } from 'dotenv';
 import { FileUpload } from 'graphql-upload';
 import { Product } from '../products/entities/product.entity';
+import { FileService } from '../file/file.service';
 
 config();
 
@@ -21,6 +22,8 @@ export class ProductImageService {
     private readonly productImageRepository: Repository<ProductImage>,
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
+
+    private readonly fileService: FileService
   ) {}
 
   async upload({ productId, images }: IImages) {
@@ -38,27 +41,10 @@ export class ProductImageService {
       throw new UnprocessableEntityException('🚧제품아이디가 이상한데용?🚧');
     }
 
-    // 일단 먼저 다 받아오기
-    const waitedImages = await Promise.all(images);
+    const processFiles = await Promise.all(images)
 
-    const results = await Promise.all(
-      // 다 받아온 파일들을 각각 Promise형태로 바꿔주고 위에서 ALL로 처리한다.
-      waitedImages.map((e) => {
-        const res: Promise<string> = new Promise((res, rej) => {
-          e.createReadStream()
-            .pipe(storage.file(e.filename).createWriteStream())
-            .on('finish', () =>
-              // 성공시에 해당함수
-              res(`${process.env.GOOGLE_BUCKET}/${e.filename}`),
-            )
-            .on('error', () =>
-              // 실패시에 해당함수
-              rej(),
-            );
-        });
-        return res;
-      }),
-    );
+    // 4.21 리팩터링 ( 파일업로드 부분을 서비스로 분할 )
+    const results = await this.fileService.uploadFileToStorage({processFiles: processFiles})
 
     const savedResults = await Promise.all(
       results.map((el) => {
@@ -69,7 +55,6 @@ export class ProductImageService {
           });
           res(aaa);
         });
-        console.log(saveData)
         return saveData;
       }),
     );
@@ -89,8 +74,9 @@ export class ProductImageService {
     const product = await this.productRepository.findOne({
       id: productId,
     });
+    
 
-    if (!productId) {
+    if (!product) {
       throw new UnprocessableEntityException('🚧제품아이디가 이상한데용?🚧');
     }
 
@@ -104,10 +90,10 @@ export class ProductImageService {
       currentImages.push(e.url);
     });
     // 일단 먼저 다 받아오기
-    const waitedImages = await Promise.all(images);
+    const processFiles = await Promise.all(images)
 
     const deleteImages = [];
-    const updateImages = waitedImages.filter((e) => {
+    const updateImages = processFiles.filter((e) => {
       if (
         currentImages.includes(`${process.env.GOOGLE_BUCKET}/${e.filename}`)
       ) {
@@ -116,6 +102,7 @@ export class ProductImageService {
       }
       return true;
     });
+    
 
     console.log(deleteImages);
     console.log(updateImages);
@@ -135,24 +122,8 @@ export class ProductImageService {
       console.log(deleteResults);
     }
 
-    const results = await Promise.all(
-      // 다 받아온 파일들을 각각 Promise형태로 바꿔주고 위에서 ALL로 처리한다.
-      updateImages.map((e) => {
-        const res: Promise<string> = new Promise((res, rej) => {
-          e.createReadStream()
-            .pipe(storage.file(e.filename).createWriteStream())
-            .on('finish', () =>
-              // 성공시에 해당함수
-              res(`${process.env.GOOGLE_BUCKET}/${e.filename}`),
-            )
-            .on('error', () =>
-              // 실패시에 해당함수
-              rej(),
-            );
-        });
-        return res;
-      }),
-    );
+    // 4.21 리팩터링 ( 파일업로드 부분을 서비스로 분할 )
+    const results = await this.fileService.uploadFileToStorage({processFiles: updateImages})
 
     const savedResults = await Promise.all(
       results.map((el) => {
