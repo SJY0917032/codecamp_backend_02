@@ -2,6 +2,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/node
 # Edit at https://www.toptal.com/developers/gitignore?templates=node
 
+### KeyFile
+*.keyfile.json
+
 ### MAC ###
 .DS_Store
 
@@ -159,3 +162,5 @@ class/26/26-03-transaction-ACID-isolation/backend/src/commons/auth/jwt-google-st
 class/27/27-01-file-upload/backend/src/commons/auth/jwt-google-strategy.ts
 class/27/27-01-file-upload/backend/united-idea-347705-04d7c880ff91.json
 main-project/backend/united-idea-347705-04d7c880ff91.json
+class/28/28-01-Trigger/backend/src/commons/auth/jwt-google-strategy.ts
+class/28/28-02-Redis/backend/src/commons/auth/jwt-google-strategy.ts

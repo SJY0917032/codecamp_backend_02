@@ -1,16 +1,33 @@
-import { UnprocessableEntityException, UseGuards } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  UnprocessableEntityException,
+  UseGuards,
+  Inject,
+} from '@nestjs/common';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { UserService } from '../users/user.service';
 import * as bcrypt from 'bcrypt';
 import { AuthService } from './auth.service';
-import { GqlAuthRefreshGuard } from 'src/commons/auth/gql-auth.guard';
+import {
+  GqlAuthAccessGuard,
+  GqlAuthRefreshGuard,
+} from 'src/commons/auth/gql-auth.guard';
 import { CurrentUser, ICurrentUser } from 'src/commons/auth/gql-user.parm';
+import * as jwt from 'jsonwebtoken';
+
+/**
+ * Redis
+ */
+import { Cache } from 'cache-manager';
+import internal from 'stream';
 
 @Resolver()
 export class AuthResolver {
   constructor(
     private readonly userService: UserService,
     private readonly authService: AuthService,
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache,
   ) {}
 
   @Mutation(() => String)
@@ -46,4 +63,78 @@ export class AuthResolver {
   ) {
     return this.authService.getAccessToken({ user: currentUser });
   }
+
+  // LogOut
+  @UseGuards(GqlAuthAccessGuard)
+  @Mutation(() => String)
+  async logOut(
+    @Context() context: any, //
+  ) {
+    const accessToken = context.req.headers.authorization.split(' ');
+    const refreshToken = getCookieValue(
+      context.req.headers.cookie,
+      'refreshToken',
+    );
+
+    try {
+      const decodeAccessToken = await new Promise((resolve, reject) => {
+        jwt.verify(accessToken[1], 'myAccessKey', (err, decoded) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(decoded);
+          }
+        });
+      });
+      const decodeRefreshToken = await new Promise((resolve, reject) => {
+        jwt.verify(refreshToken, 'myRefreshKey', (err, decoded) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(decoded);
+          }
+        });
+      });
+    } catch (error) {
+      console.error('에러가났는데용');
+    }
+
+    await this.cacheManager.set(`accessToken${accessToken[1]}`, 'accessToken', {
+      ttl: 0,
+    });
+    await this.cacheManager.set(
+      `refreshToken$${refreshToken}`,
+      'refreshToken',
+      {
+        ttl: 0,
+      },
+    );
+
+    const inRedisAccessToken = await this.cacheManager.get(
+      `accessToken${accessToken[1]}`,
+    );
+    const inRedisRefreshToken = await this.cacheManager.get(
+      `refreshToken$${refreshToken}`,
+    );
+
+    return '로그아웃에 성공했습니다.';
+  }
 }
+
+const getCookieValue = (cookie = '', key: string) => {
+  const cookieKey = key + '=';
+  let result = '';
+  const cookieArr = cookie.split(';');
+
+  for (let i = 0; i < cookieArr.length; i++) {
+    if (cookieArr[i][0] === ' ') {
+      cookieArr[i] = cookieArr[i].substring(1);
+    }
+
+    if (cookieArr[i].indexOf(cookieKey) === 0) {
+      result = cookieArr[i].slice(cookieKey.length, cookieArr[i].length);
+      return result;
+    }
+  }
+  return result;
+};

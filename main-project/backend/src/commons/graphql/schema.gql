@@ -131,6 +131,7 @@ type Mutation {
   deleteUserSubscribes(usersubscribesId: String!): Boolean!
   login(email: String!, password: String!): String!
   restoreAccessToken: String!
+  logOut: String!
   createOrder(impUid: String!, merchantUid: String!, subscribeId: String!): Order!
   cancleOrder(impUid: String!, reason: String!): Boolean!
   uploadImage(images: [Upload!]!, productId: String!): [String!]!

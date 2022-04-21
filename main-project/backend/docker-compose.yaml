@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   # 서비스명
-  my-backend:
+  my-backend-main-project:
     # Dockerfile
     build:
       # 위치
@@ -22,3 +22,8 @@ services:
       MYSQL_ROOT_PASSWORD: 'root'
     ports:
       - 3306:3306
+
+  my-redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
