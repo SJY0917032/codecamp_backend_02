@@ -46,7 +46,6 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
       'refreshToken',
     );
 
-  
     const inRedisRefreshToken = await this.cacheManager.get(
       `refreshToken$${refreshToken}`,
     );
@@ -55,10 +54,19 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
       throw new UnauthorizedException("이미 로그아웃된 유저입니다.")
     }
 
+    await this.cacheManager.set(
+      `refreshToken$${refreshToken}`,
+      'refreshToken',
+      {
+        ttl: payload.exp,
+      },
+    );
+
     return {
       email: payload.email,
       id: payload.sub,
       name: payload.name,
+      payload: payload.exp,
     };
   }
 }

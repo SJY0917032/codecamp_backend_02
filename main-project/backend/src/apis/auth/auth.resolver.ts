@@ -1,6 +1,7 @@
 import {
   CACHE_MANAGER,
   UnprocessableEntityException,
+  UnauthorizedException,
   UseGuards,
   Inject,
 } from '@nestjs/common';
@@ -19,7 +20,6 @@ import * as jwt from 'jsonwebtoken';
  * Redis
  */
 import { Cache } from 'cache-manager';
-import internal from 'stream';
 
 @Resolver()
 export class AuthResolver {
@@ -77,45 +77,19 @@ export class AuthResolver {
     );
 
     try {
-      const decodeAccessToken = await new Promise((resolve, reject) => {
-        jwt.verify(accessToken[1], 'myAccessKey', (err, decoded) => {
+        jwt.verify(accessToken[1], 'myAccessKey', (err) => {
           if (err) {
-            reject(err);
-          } else {
-            resolve(decoded);
-          }
+            throw new UnauthorizedException("이미 로그아웃된 유저입니다.")
+          } 
         });
-      });
-      const decodeRefreshToken = await new Promise((resolve, reject) => {
-        jwt.verify(refreshToken, 'myRefreshKey', (err, decoded) => {
+        jwt.verify(refreshToken, 'myRefreshKey', (err) => {
           if (err) {
-            reject(err);
-          } else {
-            resolve(decoded);
-          }
+            throw new UnauthorizedException("이미 로그아웃된 유저입니다.")
+          } 
         });
-      });
     } catch (error) {
       console.error('에러가났는데용');
     }
-
-    await this.cacheManager.set(`accessToken${accessToken[1]}`, 'accessToken', {
-      ttl: 0,
-    });
-    await this.cacheManager.set(
-      `refreshToken$${refreshToken}`,
-      'refreshToken',
-      {
-        ttl: 0,
-      },
-    );
-
-    const inRedisAccessToken = await this.cacheManager.get(
-      `accessToken${accessToken[1]}`,
-    );
-    const inRedisRefreshToken = await this.cacheManager.get(
-      `refreshToken$${refreshToken}`,
-    );
 
     return '로그아웃에 성공했습니다.';
   }
