@@ -16,6 +16,7 @@ import { ProductImageModule } from './apis/productsImage/productImage.module';
  */
 import type { RedisClientOptions } from 'redis';
 import * as redisStore from 'cache-manager-redis-store';
+import { ReviewModule } from './apis/reviewboard/reviewBoard.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import * as redisStore from 'cache-manager-redis-store';
     AuthModule,
     OrderModule,
     ProductImageModule,
+    ReviewModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
