@@ -7,22 +7,22 @@ function solution(people, limit) {
   people.sort((a, b) => b - a);
   let answer = 0;
   const half = limit / 2;
-  while (people[0] >= half) {
-    if (people[0] + people[people.length - 1] <= limit) {
-      people.shift();
-      people.pop();
+  let p1 = 0;
+  let p2 = people.length - 1;
+
+  while (p1 <= p2) {
+    if (people[p1] <= half) {
+      answer += Math.ceil((p2 + 1 - p1) / 2);
+      break;
+    }
+    if (people[p1] + people[p2] <= limit) {
+      p1++;
+      p2--;
       answer++;
     } else {
-      people.shift();
+      p1++;
       answer++;
     }
   }
-
-  if (people.length > 0) {
-    answer += Math.ceil(people.length / 2);
-  }
   return answer;
 }
-
-// 푸는중 4.26...
-// 효율성 OUT
