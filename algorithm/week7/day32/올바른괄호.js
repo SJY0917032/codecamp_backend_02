@@ -26,6 +26,19 @@ function solution(s) {
   return c > 0 ? false : true;
 }
 
-// 근데 같은풀이를 제출을 3번햇는데
-// 2번실패하고 1번은 통과해서 풀려짐;
-// 문제가이상하다
+// 리팩터링 ( 리듀스 활용 )
+// function solution(s) {
+//   if(s[0] === ")" || s[s.length-1] === "("){
+//       return false;
+//   }
+//     // reduce도는중 0보다 작아지는걸 체크하는 FLAG
+//    let fail = false;
+//     const answer = s.split("")
+//                     .reduce( (acc, cur) => {
+//                         if(acc<0){
+//                             fail = true;
+//                         }
+//                         return acc + (cur === "(" ? 1 : -1)
+//                     },0)
+//     return answer === 0 && !fail
+// }
