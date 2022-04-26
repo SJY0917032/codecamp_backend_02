@@ -1,4 +1,8 @@
 function solution(s) {
+  // 4.26일 수정
+  if (s[0] === ")" && s[s.length - 1] === "(") {
+    return false;
+  }
   // ( 가 열린 횟수를 추가한다
   let c = 0;
   // s만큼 돈다
