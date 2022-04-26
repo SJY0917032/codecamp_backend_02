@@ -122,7 +122,7 @@ type Query {
   fetchUserSubscribes: [UserSubscribe!]!
   fetchUserSubscribesWtihDeleted: [UserSubscribe!]!
   fetchUserSubscribe: UserSubscribe!
-  fetchReviews(word: String!, star: Float!): [SerachReviewBoard!]!
+  fetchReviews(search: String!, star: Float!): [SerachReviewBoard!]!
 }
 
 type Mutation {

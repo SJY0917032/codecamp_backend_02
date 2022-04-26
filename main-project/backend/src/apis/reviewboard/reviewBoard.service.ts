@@ -45,7 +45,7 @@ export class ReviewService{
         
         // 3. 없으면 ElasticSearch에서 해당 검색어를 검색한다.
         const result = await this.elasticsearchService.search({
-            index: 'reviews',
+            index: 'review_boards',
             //  prefix : ~로 시작하는 모든것을 가져와라 (4word4) 이런식이면 못가져옴
             //     query: { 
             //         prefix:{
@@ -58,7 +58,7 @@ export class ReviewService{
                 //         contents:{value:`*${search}*`}
                 //     }
                 // }
-            // range + wildcard  (해당별점에있는 "search"가포함된 내용)
+            // range + prefix  (해당별점에있는 "search"가포함된 내용)
             query:{
                 bool:{
                     must:[{range:{
@@ -67,8 +67,8 @@ export class ReviewService{
                             lte:star
                         }
                     }},{
-                        wildcard:{
-                            contents:{value:`*${search}*`}
+                        prefix:{
+                            contents:search
                         }
                     }]
                 }

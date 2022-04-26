@@ -1,0 +1,63 @@
+{
+    "template" : "template-review",
+    "index_patterns": ["*"],
+    "order": "1",
+    "settings" :{
+        "index" : {
+            "max_ngram_diff" : 25
+        },
+        "analysis" : {
+            "analyzer" : {
+                "my_analyzer" : {
+                    "type" : "custom",
+                    "tokenizer" : "letter",
+                    "filter" : ["lowercase","stop","snowball"]
+                    },
+                "ngram_analyzer": {
+                    "type": "custom",
+                    "tokenizer": "letter",
+                    "filter" : ["lowercase","ngram_filter"]
+                }
+            },
+            "filter" : {
+                "ngram_filter" : {
+                    "type" : "ngram",
+                    "min_gram" : 2,
+                    "max_gram" : 6
+                }
+            }
+        }
+    },
+    "mappings" : {
+        "properties" :{
+            "id" : {
+                "type" : "text"
+            },
+            "userid" : {
+                "type" : "text"
+            },
+            "star" : {
+                "type" : "long"
+            },
+            "updatedat" : {
+                "type" : "float"
+            },
+            "contents" : {
+                "type" : "text",
+                "analyzer" : "my_analyzer",
+                "search_analyzer" : "standard",
+                "fields" : {
+                    "keyword" : {
+                        "type" : "keyword",
+                        "ignore_above" : 256
+                    },
+                    "ngram" : {
+                        "type" : "text",
+                        "analyzer" : "ngram_analyzer",
+                        "search_analyzer" : "standard"
+                    }
+                }
+            }
+        }
+    }
+}
