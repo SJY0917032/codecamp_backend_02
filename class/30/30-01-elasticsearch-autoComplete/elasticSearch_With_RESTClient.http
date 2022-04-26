@@ -1,0 +1,264 @@
+###
+
+POST http://localhost:9200/myboard/_doc/1
+Content-Type: application/json
+// create
+{
+    "title" : "this title",
+    "contents" : "this contents"
+}
+###
+// Read
+GET http://localhost:9200/myboard/_search
+Content-Type: application/json
+
+
+### 
+/// DELETE
+DELETE http://localhost:9200/myboard/
+Content-Type: application/json
+
+### 
+POST http://localhost:9200/myproduct02/_doc/1
+Content-Type: application/json
+
+{
+    "name" : "구 식 마 우 스",
+    "description" : "안 녕 하 세 요. WorstShop입니다, 당장 나가세요",
+    "price" : 100000000
+}
+
+###
+POST http://localhost:9200/myproduct02/_doc/2
+Content-Type: application/json
+
+{
+    "name" : "구식키보드",
+    "description" : "구식 키보드 오늘만 특가!!",
+    "price" : 50000
+}
+
+###
+// Update
+PUT http://localhost:9200/myproduct02/_doc/2
+Content-Type: application/json
+
+{
+    "name" : "구구단식키보드",
+    "description" : "구구단식 키보드 오늘만 특가!!",
+    "price" : 999000
+}
+
+###
+GET http://localhost:9200/myproduct02/_search
+Content-Type: application/json
+
+###
+// 검색어를 통한 검색
+GET http://localhost:9200/myproduct02/_search/
+Content-Type: application/json
+
+{
+    "query" : {
+        "match" : {
+            "description" : "Worst"
+        }
+    }
+}
+
+### 
+// 어떻게 검색되는지?
+POST http://localhost:9200/myproduct02/_analyze
+Content-Type: application/json
+
+{
+    "analyzer": "snowball",
+    "text" : "안녕하세요. WORSTSHOP입니다! WORST going"
+}
+
+
+###
+
+PUT http://localhost:9200/myproduct03/
+Content-Type: application/json
+
+{
+    "settings" : {
+        "analysis" : {
+            "analyzer" : {
+                "my_ngram_analyzer" : {
+                    "tokenizer" : "my_ngram_tokenizer"
+                }
+            },
+            "tokenizer" : {
+                "my_ngram_tokenizer" : {
+                    "type" : "nGram",
+                    "min_gram" : "1",
+                    "max_gram" : "10"
+                }
+            }
+        },
+    "max_ngram_diff" : "20"
+    }
+}
+
+###
+// 세팅이 바뀐걸 확인
+GET http://localhost:9200/myproduct02/_settings
+Content-Type: application/json
+
+
+
+###
+// 설정 바꾸기.
+POST http://localhost:9200/myproduct03/_close
+Content-Type: application/json
+
+# {
+#     "settings" : {
+#         "analysis" : {
+#             "analyzer" : {
+#                 "my_ngram_analyzer" : {
+#                     "tokenizer" : "my_ngram_tokenizer"
+#                 }
+#             },
+#             "tokenizer" : {
+#                 "my_ngram_tokenizer" : {
+#                     "type" : "nGram",
+#                     "min_gram" : "1",
+#                     "max_gram" : "10"
+#                 }
+#             }
+#         },
+#     "max_ngram_diff" : "10"
+#     }
+# }
+
+###
+// 설정 바꾸기. 2
+PUT http://localhost:9200/myproduct03/_settings
+Content-Type: application/json
+
+{
+    "settings" : {
+        "analysis" : {
+            "analyzer" : {
+                "my_ngram_analyzer" : {
+                    "tokenizer" : "my_ngram_tokenizer"
+                }
+            },
+            "tokenizer" : {
+                "my_ngram_tokenizer" : {
+                    "type" : "nGram",
+                    "min_gram" : "1",
+                    "max_gram" : "10"
+                }
+            }
+        },
+    "max_ngram_diff" : "10"
+    }
+}
+
+###
+// 설정완료되면 opne
+POST http://localhost:9200/myproduct03/_open
+Content-Type: application/json
+
+
+###
+
+POST http://localhost:9200/myproduct02/_close
+
+###
+
+PUT http://localhost:9200/myproduct02/_settings
+Content-Type: application/json
+
+{
+    "settings" : {
+        "analysis" : {
+            "analyzer" : {
+                "my_ngram_analyzer" : {
+                    "tokenizer" : "my_ngram_tokenizer"
+                }
+            },
+            "tokenizer" : {
+                "my_ngram_tokenizer" : {
+                    "type" : "nGram",
+                    "min_gram" : "1",
+                    "max_gram" : "10"
+                }
+            }
+        },
+    "max_ngram_diff" : "10"
+    }
+}
+
+###
+
+POST http://localhost:9200/myproduct02/_open
+
+###
+// 세팅이 바뀐걸 확인
+GET http://localhost:9200/myproduct02/_settings
+Content-Type: application/json
+
+
+### 
+POST http://localhost:9200/myproduct02/_analyze
+Content-Type: application/json
+
+{
+    "analyzer": "my_ngram_analyzer",
+    "text" : "안녕하세요 WOLRD WORST SHOP입니다!?"
+}
+
+// Mappings
+###
+GET http://localhost:9200/myproduct03/_mappings
+Content-Type: application/json
+
+
+### 
+PUT http://localhost:9200/myproduct03/_mappings
+Content-Type: application/json
+
+{
+    "properties" : {
+        "name" : {
+            "type" : "text"
+        },
+        "description" : {
+            "type" : "text",
+            "analyzer" : "my_ngram_analyzer"
+        },
+        "price" : {
+            "type" : "long"
+        }
+    }
+}
+
+
+###
+POST http://localhost:9200/myproduct03/_doc/1
+Content-Type: application/json
+
+{
+    "name" : "구구단식키보드",
+    "description" : "Hello?, BestShop입니다, 국내 최고 Best 상품만 판매합니다.",
+    "price" : 999000
+}
+
+###
+POST http://localhost:9200/myproduct03/_search
+Content-Type: application/json
+
+{
+    "query":{
+        "bool" : {
+            "should" : [
+                {"prefix" : {"name" : "구"}}
+            ]
+        }
+    }
+}
