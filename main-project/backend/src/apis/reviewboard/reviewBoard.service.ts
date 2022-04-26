@@ -32,9 +32,9 @@ export class ReviewService{
         private readonly cacheManager: Cache
     ){}
 
-    async find({word, star}){
+    async find({search, star}){
         // 1. Redis에서 해당 검색어를 검색한다
-        const redisRes = await this.cacheManager.get(`${word}and${star}`)
+        const redisRes = await this.cacheManager.get(`${search}and${star}`)
 
         if(redisRes){
             console.log("레디스에서 결과값을 가져왔습니다.");
@@ -46,19 +46,19 @@ export class ReviewService{
         // 3. 없으면 ElasticSearch에서 해당 검색어를 검색한다.
         const result = await this.elasticsearchService.search({
             index: 'reviews',
-        //  prefix : ~로 시작하는 모든것을 가져와라 (4word4) 이런식이면 못가져옴
-        //     query: { 
-        //         prefix:{
-        //             contents:word
-        //         }
-        //    }
-        // wildcard : ** 안에있는 단어를 wildcard로사용, 포함되는 모든것을 가져와라.
-            // query:{
-            //     wildcard:{
-            //         contents:{value:`*${word}*`}
-            //     }
-            // }
-        // range + wildcard  (해당별점에있는 "word"가포함된 내용)
+            //  prefix : ~로 시작하는 모든것을 가져와라 (4word4) 이런식이면 못가져옴
+            //     query: { 
+            //         prefix:{
+            //             contents:search
+            //         }
+            //    }
+            // wildcard : ** 안에있는 단어를 wildcard로사용, 포함되는 모든것을 가져와라.
+                // query:{
+                //     wildcard:{
+                //         contents:{value:`*${search}*`}
+                //     }
+                // }
+            // range + wildcard  (해당별점에있는 "search"가포함된 내용)
             query:{
                 bool:{
                     must:[{range:{
@@ -68,7 +68,7 @@ export class ReviewService{
                         }
                     }},{
                         wildcard:{
-                            contents:{value:`*${word}*`}
+                            contents:{value:`*${search}*`}
                         }
                     }]
                 }
@@ -78,7 +78,7 @@ export class ReviewService{
 
         const hits = result.hits.hits.map((e) => e._source)
         // 4. 조회한 결과를 Redis에 저장시킨다
-        await this.cacheManager.set(`${word}and${star}`, hits, {
+        await this.cacheManager.set(`${search}and${star}`, hits, {
             ttl: 60
         })
         console.log(hits)

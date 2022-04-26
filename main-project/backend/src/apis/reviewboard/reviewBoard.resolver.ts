@@ -17,10 +17,10 @@ export class ReviewResolver{
     // 검색한 결과값을 담아주는 GraphQL Object
     @Query(() => [SerachReviewBoard])
     fetchReviews(
-        @Args("word") word: string,//
+        @Args("search") search: string,//
         @Args('star') star: number,
     ) {
-        return this.reviewService.find({ word, star })
+        return this.reviewService.find({ search, star })
     }
 
 
