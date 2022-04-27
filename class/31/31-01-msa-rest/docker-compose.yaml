@@ -1,0 +1,29 @@
+version: "3.3"
+
+services:
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    volumes:
+      - ./api-gateway/src:/api-gateway/src
+    ports:
+      - 3000:3000
+
+  auth-service:
+    build:
+      context: ./service/auth
+      dockerfile: Dockerfile
+    volumes:
+      - ./service/auth/src:/auth-service/src
+    ports:
+      - 3001:3001
+
+  resource-service:
+    build:
+      context: ./service/resource
+      dockerfile: Dockerfile
+    volumes:
+      - ./service/resource/src:/resource-service/src
+    ports:
+      - 3002:3002
