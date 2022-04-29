@@ -14,20 +14,12 @@ class MockUserRepository {
       age: 8,
     },
   ];
-
+  findOne({ email }) {
+    return this.mydb.find((e) => e.email === email);
+  }
   save({ email, password, name, age }) {
     this.mydb.push({ email, password, name, age });
-    console.log('Call Call Call by Save');
-    console.log({ email, password, name, age });
     return { email, password, name, age };
-  }
-  findOne({ email }) {
-    const users = this.mydb.filter((e) => {
-      e.email === email;
-    });
-    console.log('Call Call Call');
-    if (users.length) return users[0];
-    return null;
   }
 }
 
