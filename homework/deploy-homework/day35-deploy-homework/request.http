@@ -1,0 +1,8 @@
+###
+
+POST http://backendclass.codebootcamp.co.kr/graphql
+Content-Type: application/json
+
+{
+    "query": "query { fetchBoards{ _id, writer } }"
+}

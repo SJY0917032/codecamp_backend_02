@@ -1,0 +1,29 @@
+version: '3.7'
+# Product
+
+services:
+  # 서비스명
+  my-backend:
+    # Dockerfile
+    build:
+      # 위치
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3001:3001
+    # 배포환경에서 볼륨은 주석된다.
+    volumes:
+      #  도커 밖(원본) : 도커 안(도커내부)
+      - ./src:/myfolder/src
+      # 환경변수 파일
+    env_file:
+      - ./.env.dev
+
+  my-database:
+    platform: linux/x86_64
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: 'mydocker02'
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - 3306:3306
