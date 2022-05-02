@@ -27,11 +27,11 @@ import { UserModlue } from './apis/users/user.module';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost', // docker에 올리기때문에 docker에 지정한 네임으로 가야한다.
+      host: '10.60.224.3', // 05-02 VPC IP를 할당한다.
       port: 3306,
       username: 'root',
-      password: 'qkek347',
-      database: 'myproject02',
+      password: 'root',
+      database: 'myserver02',
       entities: [__dirname + '/apis/**'],
       synchronize: true,
       logging: true, // 로그를 남긴다 (명령어가 어떻게 바뀌는지)
