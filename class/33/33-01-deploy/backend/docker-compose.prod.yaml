@@ -4,6 +4,8 @@ version: '3.7'
 services:
   # 서비스명
   my-backend:
+    platform: linux/amd64
+    image: asia.gcr.io/united-idea-347705/class_0503:1.0
     # Dockerfile
     build:
       # 위치
@@ -16,8 +18,8 @@ services:
     #   #  도커 밖(원본) : 도커 안(도커내부)
     #   - ./src:/myfolder/src
     #   # 환경변수 파일
-    env_file:
-      - ./.env.prod
+    # env_file:
+    #   - ./.env.prod
 
   # 05-02 DB를 GCP의 SQL로 옮김.
   # my-database:

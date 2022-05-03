@@ -27,11 +27,11 @@ import { UserModlue } from './apis/users/user.module';
     }),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: '10.60.224.3', // 05-02 VPC IP를 할당한다.
+      host: 'class-db-0503', // 05-03  쿠버네티스에 배포된 db를입력한다. 하지만 따로 네트워크 배포를 해야만  서로 네임리졸루션이 되면서 연결됨.
       port: 3306,
       username: 'root',
       password: 'root',
-      database: 'myserver02',
+      database: 'mypod02',
       entities: [__dirname + '/apis/**'],
       synchronize: true,
       logging: true, // 로그를 남긴다 (명령어가 어떻게 바뀌는지)
