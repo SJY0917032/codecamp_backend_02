@@ -3,13 +3,13 @@ steps:
   - name: docker/compose:1.29.0
     args: 
       - -f
-      - docker-compose.prod.yaml
+      - class/33/33-01-deploy/backend/docker-compose.prod.yaml
       - build
   # 2단계  docker-compose -f docker-compose.prod.yaml push
   - name: docker/compose:1.29.0
     args:
       - -f
-      - docker-compose.prod.yaml
+      - class/33/33-01-deploy/backend/docker-compose.prod.yaml
       - push
   # 3단계 kubectl set image deployment/class-0503-nest class-0503-sha256-1=asia.....
   - name: 'gcr.io/cloud-builders/kubectl'
