@@ -12,8 +12,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const returnTime = `${eDate.getHours()}:${eDate.getMinutes()}:${eDate.getSeconds()}`
 
 
-    console.log('🚧****************************🚧');
-    console.log(`${message}가 발생했습니다. 코드는 ${status} 발생일자 : ${returnDate} 발생시간 : ${returnTime}`);
-    console.log('🚧****************************🚧');
+    console.log('🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧');
+    console.log(`🚀${message}가 발생했습니다. 코드는 ${status} 발생일자 : ${returnDate} 발생시간 : ${returnTime}`);
+    console.log('🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧🚧');
   }
 }
