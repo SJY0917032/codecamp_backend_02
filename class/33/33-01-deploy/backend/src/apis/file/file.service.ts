@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Storage } from '@google-cloud/storage';
-import { config } from 'dotenv';
 import { FileUpload } from 'graphql-upload';
 
-config();
 
 interface IFiles {
   files: FileUpload[];
@@ -13,9 +11,9 @@ interface IFiles {
 export class FileService {
   async upload({ files }: IFiles) {
     const storage = new Storage({
-      keyFilename: process.env.KEY_FILENAME,
-      projectId: process.env.PROJECT_ID,
-    }).bucket(process.env.GOOGLE_BUCKET);
+      keyFilename: '/my-secret/gcp-file-storage.json',
+      projectId: "united-idea-347705",
+    }).bucket("sjy0917-1");
 
     // 일단 먼저 다 받아오기
     const waitedFiles = await Promise.all(files);
@@ -28,11 +26,11 @@ export class FileService {
             .pipe(storage.file(e.filename).createWriteStream())
             .on('finish', () =>
               // 성공시에 해당함수
-              res(`${process.env.GOOGLE_BUCKET}/${e.filename}`),
+              res(`sjy0917-1/${e.filename}`),
             )
-            .on('error', () =>
+            .on('error', (error) =>
               // 실패시에 해당함수
-              rej(),
+              rej(error),
             );
         });
       }),
